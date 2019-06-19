@@ -1,0 +1,180 @@
+library(tools)				 # tools를 library한다(:불러들인다).
+toTitleCase('developer')
+
+
+install.packages('stringr')		# 이렇게 하면 패키지를 설치할 수 있다.
+library(stringr)			# stringr가 tools보다 더 유용할 것, 다만 인스톨 해야함
+str_to_title('developer')
+
+
+## 날짜 함수 사용시 설치
+# lubridate 패키지 설치하기
+install.packages('lubridate')
+library(lubridate)
+
+
+## orderBy는 패키지안에 있는 것
+## doBy : 데이터 프레임에 정렬
+install.packages('doBy')
+library(doBy)
+
+
+## sqldf
+- sql을 이용해서 데이터를 처리한다.
+install.packages('sqldf')
+library(sqldf)
+
+
+## ddply
+- 데이터프레임을 분할하고 함수를 적용한 뒤 데이터프레임으로 결과를 반환하는 함수
+- 여러 집계값을 구할 수 있고, NA값도 출력해준다.
+install.packages('plyr')
+library(plyr)
+
+
+## dplyr -> ( filter : 조건을 주어서 필터링하는 함수 )
+install.packages('dplyr')
+library(dplyr)
+
+
+## install.packages('reshape2')
+library(reshape2)
+
+
+## library(stringr)	# 불러들이기
+## str_detect : 특정 문자가 있는지를 검사해서 TRUE/FALSE 를 출력하는 함수
+## str_count : 주어진 단어에서 해당 글자가 몇번 나오는지 알려주는 함수
+
+
+# 3D plot
+# library(plotrix) 패키지 : barlabels, boxed.labels
+install.packages('plotrix')
+library(plotrix)
+
+
+## 색상 종류 보는 방법
+## colors()
+
+
+## google map
+install.packages('ggmap')
+library(ggmap)
+
+
+install.packages('animation')
+library(animation)
+
+
+install.packages('jpeg')
+library(jpeg)
+
+
+## 데이터프레임 결과를 오라클 DBA에 테이블로 생성하는 방법
+install.packages("RJDBC")
+library(RJDBC)
+jdbcDriver <- JDBC(driverClass="oracle.jdbc.OracleDriver", classPath="C:/r/ojdbc6.jar")
+conn <- dbConnect(jdbcDriver, "jdbc:oracle:thin:@localhost:1521/xe", "hr",  "hr") 
+
+
+install.packages('ggplot2')
+library(ggplot2)
+
+
+## 텍스트 마이닝
+-저번에 깔아놓은 자바랑 .jar가 컴퓨터에 있어야 인스톨 할 수 있음
+# install.packages('rJava')
+# library(rJava)
+
+# install.packages('KoNLP')
+# library(KoNLP)
+
+install.packages('wordcloud')
+library(wordcloud)
+
+# 모양 바꿔서 단어 빈도수에 따른 그림 보여주기
+install.packages('wordcloud2')
+library(wordcloud2)
+
+install.packages('tm')
+library(tm)
+
+library(RColorBrewer)
+
+
+# 단어끼리의 연관도 그래프 그리기
+mm <- m2 %*% t(m2) # mm을 통해 관계도를 표현함(행렬의 곱)
+install.packages('igraph')
+library(igraph)
+
+
+## 머신러닝 알고리즘 세트
+install.packages('class')
+library(class)
+
+
+# (knn 할 때 외에도) 비교할 때 CrossTable 사용할 수 있음
+library(gmodels)
+CrossTable(emp$JOB_ID,emp$sal_yn)
+
+
+# 얘는 모델을 만들 수 있음(knn은 모델을 만들 수 없음)
+# 각각의 데이터의 확률을 측정함
+install.packages("e1071")
+library(e1071)
+
+
+install.packages('tree')
+library(tree)
+help(tree)
+
+
+# 오-분류 하는 교차표 만드는 방법
+# 위의 결과를 편하게 오-분류 하는 교차표 만드는 방법
+install.packages('caret')
+library(caret)
+
+
+install.packages('rpart')
+library(rpart)
+iris_rpart <- rpart(Name~.,data=train,control=rpart.control(minsplit=2))
+
+
+# 연관규칙 보기 좋게 시각화하기
+install.packages('rpart.plot')  
+library(rpart.plot)
+
+
+# 또 다른 의사결정나무 그래프 그리기 및 표로 출력
+install.packages('rattle')
+library(rattle) # fancyRpartPlot
+
+
+# tree와 rpart는 (지니계수 이용) + 가지치기를 해야하는데 party는 가지치기 안해도 됨 - 자동 가지치기 해줌
+# p값을 이용해서 분류함
+# 독립변수 31개 이상은 안됨
+install.packages('party')
+library(party)
+
+
+library(stats) # 이 안에 k-means가 있다.
+
+
+# cluster plot 그래프 그리기(4가지 군집을 동그라미 안에 예쁘게 표현하는 그래프)
+install.packages('factoextra')
+library(factoextra)
+
+
+#-----------------------------------------------------------------------------#
+# 머신러닝 데이터 홈페이지
+#-----------------------------------------------------------------------------#
+https://archive.ics.uci.edu/ml/machine-learning-databases/mushroom/agaricus-lepiota.names
+https://archive.ics.uci.edu/ml/machine-learning-databases/mushroom/
+https://archive.ics.uci.edu/ml
+#-----------------------------------------------------------------------------#
+## 그래프 여러개 한번에 보는 방법
+graphics.off()
+par(mfrow=c(1,1)) # 기본 상태(1개만 보여주는 것)
+par(mfrow=c(2,2)) # 한 화면에 분리시켜서 그래프 여러개를 한번에 보여주는 것
+par(mfrow=c(1,2)) # 1행 2열
+par(mfrow=c(2,1))
+#-----------------------------------------------------------------------------#
