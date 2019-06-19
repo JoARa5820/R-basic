@@ -1,0 +1,28 @@
+[128]
+문제126번 결과하고 문제127결과를 하나로 합쳐 주세요.
+
+[Answer]
+x <- subset(emp,DEPARTMENT_ID==30 & SALARY >= 3000, select = c(LAST_NAME,HIRE_DATE,SALARY,JOB_ID,DEPARTMENT_ID))
+y <- subset(emp,format(HIRE_DATE,'%Y') %in% c('2002','2003'), select=c(LAST_NAME,HIRE_DATE,SALARY,JOB_ID,DEPARTMENT_ID))
+
+rbind(x,y)		# 중복제거 안된것(15개)
+
+merge(x,y,all=T)	# 중복제거 한 것(13개)
+
+
+
+
+
+
+[129]
+문제126번 결과하고 문제127결과 하나로 합치되 중복되는 데이터는 제거해주세요.
+
+[Answer]
+
+library(doBy)
+
+      정렬할 기준 컬럼, 볼 컬럼들
+orderBy(~LAST_NAME,rbind(x,y))		# 15개
+
+
+orderBy(~LAST_NAME,unique(rbind(x,y)))	# 13개

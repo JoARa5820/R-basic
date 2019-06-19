@@ -1,0 +1,551 @@
+[146]
+성별 현황을 조사 자료를 이용하여 성별 인구수를 막대그래프로 만드세요.
+
+성별 현황
+
+구분	조사수
+----	------
+남자	226965
+여자	241319
+
+
+[Answer]
+
+h <- c(226965,241319)
+mw <- c('남자','여자')
+
+label <- paste(mw,':',h,'명 / ',p)
+label
+
+label <- paste(label,'%',sep="")
+label
+
+barplot(height=h,width=1,names.arg=mw,horiz=F,col=c('red','blue'),main='성별 인구 현황',legend.text=label,xlab='성별',ylab='인구 수(명)',ylim=c(0,300000),sub=paste('총 인구수 : ',sum(h),'명'))
+
+barplot(height=h,width=1,names.arg=mw,horiz=F,col=c('red','blue'),main='성별 인구 현황',xlab='성별',ylab='인구 수(명)',ylim=c(0,300000),sub=paste('총 인구수 : ',sum(h),'명'))
+legend('topright',legend=mw,cex=0.6,fill=c('red','blue'))
+
+
+또는
+
+gender <- c('남자','여자')
+survey <- c(226965,241319)
+
+bp <- barplot(height=survey,width=1,names.arg=gender,horiz=FALSE,col=c('blue','red'),main='성별현황',xlab='성별',axes=TRUE)
+
+bp <- barplot(height=survey,width=1,names.arg=gender,horiz=FALSE,col=c('blue','red'),main='성별현황',xlab='성별',axes=FALSE)
+
+
+# axes=FALSE : 축을 없애겠다. 축의 의미가 별로 없을 때
+
+bp <- barplot(height=survey,width=1,names.arg=gender,horiz=FALSE,col=c('blue','red'),main='성별현황',xlab='성별',axes=FALSE,ylim=c(0,270000))
+
+label <- paste(survey,'명',sep='')
+
+text(x=bp,y=survey,labels=label,pos=3)	# 그래프 위에 글씨 쓰기
+
+
+
+
+
+
+
+[147]
+부서별 인원수 막대그래프를 생성하세요. 단 부서없는 사원들의 인원수도 포함하세요.
+
+-기본 틀
+barplot(height=부서인원수,width=1,names.arg=부서들,horiz=FALSE,col=rainbow(인원수),main='부서별 인원 수',xlab='부서',ylab='부서별 인원 수',ylim=c(0,200))
+
+
+[Answer]
+x <- aggregate(SALARY~DEPARTMENT_ID,emp,length)	# 여기서 SALARY 대신 EMPLOYEE_ID,LAST_NAME도 가능
+names(x) <- c('DEPARTMENT_ID','CN')
+x$CN
+class(x$CN) # int 타입
+
+bp <- barplot(height=x$CN,width=1,names.arg=x$DEPARTMENT_ID,horiz=FALSE,col=rainbow(length(x$CN)),main='부서별 인원 수',xlab='부서',ylab='부서별 인원 수',ylim=c(0,50))
+legend('topright',legend=paste(x$DEPARTMENT_ID,'부서'),cex=0.6,fill=rainbow(length(x$CN)))
+
+label <- paste(x$CN,'명(',round((x$CN/sum(x$CN)*100),2),'%)',sep='') # 그래프 위에 쓸 글씨
+text(x=bp,y=x$CN,labels=label,pos=3) # 그래프 위에 글씨 쓰는 명령어
+
+=> 여기서 부서가 없는 사원들도 추가해야함
+=> 따로따로 구해서 rbind로 붙이기
+
+
+또는
+
+dept_cn <- aggregate(EMPLOYEE_ID~ifelse(is.na(DEPARTMENT_ID),'부서없음',DEPARTMENT_ID),emp,length)
+
+dept_cn
+
+names(dept_cn) <- c('dept_id','cn')
+
+dept_cn
+
+bp <- barplot(dept_cn$cn,names.arg=dept_cn$dept_id,main='부서별 인원 수',xlab='부서',col=rainbow(length(dept_cn$dept_id)),cex.name=0.7,axes=FALSE,ylim=c(0,50))
+
+label <- paste(dept_cn$cn,'명',sep='')
+
+text(x=bp, y=dept_cn$cn, labels=label, cex=0.9, pos=3)
+
+
+<또 다른 방법>
+
+x <- aggregate(EMPLOYEE_ID~DEPARTMENT_ID,emp,length)
+y <- c('부서없음',sum(is.na(emp$DEPARTMENT_ID)))
+z <- rbind(x,y)
+
+names(z) <- c('dept_id','cn')
+
+> class(x)
+[1] "data.frame"
+> class(y)
+[1] "character"
+> class(z)
+[1] "data.frame"
+
+> z
+    dept_id cn
+1        10  1
+2        20  2
+3        30  6
+4        40  1
+5        50 45
+6        60  5
+7        70  1
+8        80 34
+9        90  3
+10      100  6
+11      110  2
+12 부서없음  1
+
+
+
+
+
+
+
+[148]
+부서 이름별 급여 총액에 대해서 막대그래프를 생성하세요.단 부서없는 사원들의 인원수도 포함하세요. (text 메소드 세개 쓰기 // x축,y축 잘 생각하기)
+
+
+[Answer]
+a <- merge(emp,dept,by='DEPARTMENT_ID')
+b <- aggregate(SALARY~DEPARTMENT_NAME,a,sum)
+c <- c('부서없음',emp[which(is.na(emp$DEPARTMENT_ID)),'SALARY'])
+mode(c)
+
+c <- as.numeric(c)
+mode(c)
+
+d <- rbind(b,c)
+class(d)
+
+bp <- barplot(d$SALARY,names.arg=d$DEPARTMENT_NAME,main='부서 이름별 급여 총액',xlab='부서이름',ylab='부서별 급여 총액',ylim=c(0,350000),col=rainbow(length(d$SALARY)),las=2)
+
+label1 <- c('부서X')
+label2 <- c('최고급여')
+label3 <- c(d$SALARY)
+
+
+# 이것(label3) 먼저 써야 중앙에 위치하게 표기할 수 있음 / 아래꺼부터 쓰면 겹치면서 label3이 밀려나서 중앙에 위치하지 못함
+text(x=bp, y=d$SALARY, labels=label3, cex=0.6, pos=1)
+
+text(x=bp[is.na(d$DEPARTMENT_NAME)], y=d$SALARY[is.na(d$DEPARTMENT_NAME)], labels=label1, cex=0.9, pos=3)
+text(x=bp[d$SALARY==max(d$SALARY)], y=d$SALARY[d$SALARY==max(d$SALARY)], labels=label2, cex=0.9, pos=3)
+
+
+또는
+
+library(sqldf)
+dept_sal <- sqldf('SELECT department_name dept_name, sum(salary) sum_sal
+                  FROM emp e LEFT OUTER JOIN dept d 
+		  ON e.department_id=d.department_id
+                  GROUP BY department_name')
+
+bp <- barplot(dept_sal$sum_sal,
+              names.arg=dept_sal$dept_name,
+              col=rainbow(length(dept_sal$dept_name)),
+              main='Salary Bar Chart',
+              xlab='Dept Name', ylab='Salary',
+              ylim=c(0,350000),
+              cex.names=0.5)
+
+text(x=bp, y=dept_sal$sum_sal,
+     labels=dept_sal$sum_sal, pos=1, cex=0.5)
+
+text(x=bp[is.na(dept_sal$dept_name)],
+     y=dept_sal$sum_sal[is.na(dept_sal$dept_name)],
+     labels='부서(x)',
+     pos=3,
+     col='red')
+
+text(x=bp[dept_sal$sum_sal==max(dept_sal$sum_sal)],
+     y=dept_sal$sum_sal[dept_sal$sum_sal==max(dept_sal$sum_sal)],
+     labels='최고급여',
+     pos=3, 
+     col='red')
+
+
+# las=2를 추가함 (이게 더 보기 편함)
+
+bp <- barplot(dept_sal$sum_sal,
+              names.arg=dept_sal$dept_name,
+              col=rainbow(length(dept_sal$dept_name)),
+              main='Salary Bar Chart',
+              xlab='Dept Name', ylab='Salary',
+              ylim=c(0,350000),
+              cex.names=0.5, las=2)
+
+
+
+
+
+
+
+[149]
+fruits_sales.csv을 읽어 들인 후 년도별, 과일이름별 판매량을 그룹형 막대 그래프로 만드세요.
+
+sales <- read.csv('c:/data/fruits_sales.csv',header=TRUE,stringsAsFactors=F)
+sales
+
+# 힌트 :
+가로 : 연도별 / 세로 : 과일 판매량
+apply 계열 생각해보기 - 그 중 tapply 계열
+과일별로 묶기/연도로 나열
+
+=> tapply(sales$qty,list(sales$name,sales$year),sum)
+
+> a <- tapply(sales$qty,list(sales$name,sales$year),sum)
+> class(a)
+[1] "matrix"
+
+
+[Answer]
+
+<1번>
+bp <- barplot(sales$qty,names.arg=sales$year,col=c('red','yellow','green','blue'),
+              main='연도별,과일별 판매량',xlab='year,name',ylab='판매량',ylim=c(0,20),las=3)
+
+
+label1 <- c(sales$name)
+label2 <- c(sales$qty)
+text(x=bp,y=sales$qty,labels=label1,cex=0.9,pos=3)
+text(x=bp,y=sales$qty,labels=label2,cex=0.9,pos=1)
+
+
+<2번>
+a <- tapply(sales$qty,list(sales$year,sales$name),sum)
+
+> a
+apple banana berry orange
+2014     6      2     9      7
+2015    10      7    15      3
+2016    13     10    11      5
+2017    15     12    17      6
+
+
+> colnames(a)
+[1] "apple"  "banana" "berry"  "orange"
+
+
+bp <- barplot(a,names.arg=colnames(a),col=c('red','yellow','green','blue'),
+              main='연도별,과일별 판매량',xlab='과일이름(연도별)',ylab='판매량',ylim=c(0,20),beside=T)
+
+legend('topright',legend=colnames(a),cex=1,fill=c('red','yellow','green','blue')) # legend랑 legend.text 차이는?
+
+text(x=bp,y=a,labels=a,cex=0.9,pos=3)
+
+
+- 아래의 label 쓰면 안되고 위처럼 labels=a로 해야함
+label2 <- c(sales$qty)
+> sales$qty
+[1]  6  2  7  9 10  7  3 15 13 10  5 11 15 12  6 17
+
+
+또는
+
+f_sale <- read.csv('c:/data/fruits_sales.csv', stringsAsFactors=F)
+f_sale
+
+x<-tapply(f_sale$qty, list(f_sale$name, f_sale$year), sum)
+
+bp<-barplot(x,
+        xlab='년도', ylab='판매량',
+        col=c('red','yellow','green','orange'),
+        beside=TRUE,
+        ylim=c(0,20))
+legend('topright',
+       title='과일',
+       legend=rownames(x),
+       pch=15, col=c('red','yellow','green','orange'),
+       cex=0.7)
+title(main='년도별 과일판매량')
+
+library(plotrix)
+
+#barlabels(bp,matrix(x),matrix(x),cex=0.8,prop=1.04)
+boxed.labels(bp,matrix(x),matrix(x),cex=0.8,border=FALSE,srt=0,bg=c('red','yellow','green','orange'))
+
+
+# boxed.labels 함수를 사용하려면 library(plotrix) 패키지를 설치해놔야함
+# prop=1.04 : 막대그래프의 위에,아래에.. 어디에 할건지 값 조절해보기
+# pch : 범례의 모양새 조정
+# matrix(x) : 년도별로(열별로) 쭉 나열하는 메소드
+# srt=0 : 각도
+# bg=c(~,~,~,~) : 백그라운드 색깔
+
+
+> x
+       2014 2015 2016 2017
+apple     6   10   13   15
+banana    2    7   10   12
+berry     9   15   11   17
+orange    7    3    5    6
+
+
+
+
+
+
+
+[150]
+exam.csv file에는 학생들의 시험점수가 있습니다. 학생들의 SQL 점수를 막대그래프로 출력해주세요.
+
+[Answer]
+x <- dcast(exam, name ~ subject, value.var = 'grade')
+x
+x$SQL
+barplot(x$SQL,ylim=c(0,100),names.arg=x$name,main='SQL 점수',las=2,col=rainbow(length(x$SQL)))
+
+
+또는
+  
+graphics.off()
+par(mfrow=c(1,1))
+par(mfrow=c(2,2)) # 한 화면에 분리시켜서 그래프 여러개를 한번에 보여주는 것
+
+barplot(exam[exam$subject=='SQL','grade'],ylim=c(0,100),names.arg=exam[exam$subject=='SQL','name'],main='SQL 점수',las=2,col=rainbow(length(exam[exam$subject=='SQL','name'])))
+
+box() # 그래프에 박스가 쳐진다.
+
+
+
+
+
+
+
+[151]
+exam.csv file에는 학생들의 시험점수가 있습니다. 학생들의 R 점수를 막대그래프로 출력해주세요.
+
+[Answer]
+barplot(exam[exam$subject=='R','grade'],ylim=c(0,100),names.arg=exam[exam$subject=='R','name'],main='R 점수',las=2,col=rainbow(length(exam[exam$subject=='R','name'])))
+
+
+
+
+
+
+
+[152]
+exam.csv file에는 학생들의 시험점수가 있습니다. 학생들의 PYTHON 점수를 막대그래프로 출력해주세요.
+
+[Answer]
+barplot(exam[exam$subject=='PYTHON','grade'],ylim=c(0,100),names.arg=exam[exam$subject=='PYTHON','name'],main='PYTHON 점수',las=2,col=rainbow(length(exam[exam$subject=='PYTHON','name'])))
+
+
+
+
+
+
+
+[153]
+exam.csv file에는 학생들의 시험점수가 있습니다. 학생들의 과목 총 점수를 막대그래프로 출력하세요.
+
+[Answer]
+exam_t <- aggregate(grade~name,exam,sum)
+
+barplot(exam_t$grade,ylim=c(0,300),names.arg=exam_t$name,main='과목 총 점수',las=2,col=rainbow(length(exam_t$name)))
+
+box()
+
+
+
+
+
+
+
+[154]
+학생들의 이름을 기준으로 과목점수를 스택형 막대그래프로 생성하세요.
+
+[Answer]
+a <- tapply(exam$grade,list(exam$subject,exam$name),sum)
+
+a
+
+bp <- barplot(a,ylim=c(0,300),names.arg=colnames(a),main='과목 점수',las=2,col=c('light slate blue','dark orchid','dark magenta'),beside=F)
+
+legend('topright',legend=rownames(a),cex=1,fill=c('light slate blue','dark orchid','dark magenta'))
+
+> rownames(a)
+[1] "PYTHON" "R"      "SQL"   
+
+
+또는
+
+t <- tapply(exam$grade, list(exam$subject, exam$name), sum)
+bp <- barplot(t, names.arg=names(t), ylim=c(0,350),
+        xlab='이름', ylab='성적',col=c('blue','green','purple'),
+        main='과목별 점수',las=2)
+legend('topright',legend=rownames(t), title='과목', pch=15,
+       col=c('blue','green','purple'),
+       cex=0.9, pt.cex=1)
+abline(h=seq(100,300,100),col='red',lty=2)	# 기준 선 그어주기
+library(plotrix)
+barlabels(bp,t,bg=c('blue','green','purple'),border=c('blue','green','purple'))
+total<-apply(t,2,sum)
+text(bp,y=total*1.1,labels=paste(total,'점',sep=""))
+
+
+
+
+
+
+
+[155]
+학생들의 이름을 기준으로 과목점수를 그룹형 막대그래프로 생성하세요.
+
+
+[Answer]
+a <- tapply(exam$grade,list(exam$subject,exam$name),sum)
+a
+
+bp <- barplot(a,ylim=c(0,100),names.arg=colnames(a),main='과목 점수',las=2,col=c('hot pink','orchid','deep pink'),beside=T)
+
+legend('topright',legend=rownames(a),cex=1,fill=c('hot pink','orchid','deep pink'))
+text(x=bp,y=a,labels=a,cex=0.9,pos=3)
+
+
+또는
+
+t <- tapply(exam$grade,list(exam$subject,exam$name),sum)
+
+bp <- barplot(t,names.arg=names(t),ylim=c(0,350),xlab='이름',ylab='성적',main='과목 점수',las=2,col=c('light slate blue','dark orchid','dark magenta'),beside=T)
+
+legend('topright',legend=rownames(t),title='과목',pch=15,cex=0.9,pt.cex=1,col=c('light slate blue','dark orchid','dark magenta'))
+
+abline(h=seq(100,300,100),col='black',lty=2) # 수평선을 긋겠다. * lty : 선의 종류
+
+
+# library(plotrix)
+barlabels(bp,t,bg=c('light slate blue','dark orchid','dark magenta'),border=c('light slate blue','dark orchid','dark magenta')) # 글자테두리 : warning 뜨지만,그냥 색깔 맞춰서 안보이게 해주기
+
+total <- apply(t,2,sum)
+
+text(bp,y=total*1.1,labels=paste(total,'점',sep='')) # y=total*1.1 : 글자 포지션을 원래 위치보다 10% 위에 올려 써주겠다.
+
+
+또는
+
+bp <- barplot(t, names.arg=names(t), beside=TRUE, ylim=c(0,110),
+              xlab='이름', ylab='성적',
+              col=c('blue','green','purple'),
+              main='과목별 점수',
+              las=2)
+legend('topright',
+       legend=rownames(t),
+       title='과목',
+       pch=15,
+       col=c('blue','green','purple'),
+       cex=0.8, pt.cex=0.6)
+
+barlabels(bp,30,t,bg=c('blue','green','purple'),border=c('blue','green','purple'),cex=0.5)
+
+
+
+
+
+
+
+[156]
+창업건수.csv 파일에 데이터 중에 년도별 치킨집 창업 건수를 막대그래프로 생성하세요.
+
+[Answer]
+sta <- read.csv('c:/data/창업건수.csv',header=TRUE,stringsAsFactors=F)
+fin <- read.csv('c:/data/폐업건수.csv',header=TRUE,stringsAsFactors=F)
+
+bp <- barplot(sta$치킨집,names.arg=sta$년도,beside=T,ylim=c(0,1400),xlab='연도',ylab='창업 건수',main='치킨집 창업 건수',col=rainbow(length(sta$년도)))
+
+barlabels(bp,sta$치킨집,bg=rainbow(length(sta$년도)),border=rainbow(length(sta$년도)),cex=0.7)
+
+
+
+
+
+
+
+[157]
+년도별 치킨집 창업, 폐업 건수를 그룹형 막대그래프로 생성하세요.
+
+[Answer]
+graphics.off()
+x <- rbind(sta$치킨집,fin$치킨집)
+
+barplot(x,main='년도별 치킨집 창업,폐업',names.arg=sta$년도,col=c('blue','red'),ylim=c(0,4000),beside=T,legend=c('창업','폐업'))
+
+
+
+
+
+
+
+[160]
+한 주간 영업 판매량을 막대그래프를 생성하되 막대그래프의 색상은 판매량에 따라 다르게 해야 합니다.
+판매량이 200 이상이면 red, 199 ~ 150 이면 yellow, 149 ~ 100 이면 blue, 99 ~ 50 pink, 49 ~ black 색으로 출력하세요.
+
+       월요일 : 70 : pink
+       화요일 : 151 : yellow
+       수요일 : 210 : red
+       목요일 : 180 : yellow
+       금요일 : 250 : red
+       토요일 : 300 : red
+       일요일 : 40 : black
+       
+
+[Answer]
+coll <- c('50미만','50~100미만','100~150미만','150~200미만','200이상')
+
+week <- c('월요일','화요일','수요일','목요일','금요일','토요일','일요일')
+gap <- c(70,151,210,180,250,300,40)
+
+bp <- barplot(gap,names.arg=week,ylim=c(0,400),main='주간 영업 판매량',col=ifelse(gap>=200,'red',ifelse(gap>=150&gap<200,'yellow',ifelse(gap>=100&gap<150,'blue',ifelse(gap>=50&gap<100,'pink','black')))))
+
+legend('topright',legend=coll,col=c('black','pink','blue','yellow','red'),pch=15,cex=0.9, pt.cex=1)
+
+text(x=bp,y=gap,labels=gap,pos=3)
+
+
+또는
+
+sales <- c(70,151,210,180,250,300,40)
+colors <- NULL
+for (i in 1:length(sales)){
+  if(sales[i]>=200){
+    colors <- c(colors,"red")
+  } else if(sales[i]>= 150 & sales[i]<=199){
+    colors <- c(colors,"yellow")
+  } else if(sales[i]>=100 & sales[i]<=149){
+    colors <- c(colors,"blue")
+  } else if(sales[i]>=50 & sales[i]<=99){
+    colors <- c(colors,"pink")
+  } else {
+    colors <- c(colors,"black")
+  }
+}
+colors
+barplot(sales, main = "판매량", 
+        names.arg=c("월","화","수","목","금","토","일"),
+        col=colors, xlab="요일", ylab="판매량", ylim=c(0,350))
+
+abline(h=seq(0,350,10),lty=3)

@@ -1,0 +1,11 @@
+********************************************************
+# as.Date는 문자를 날짜로 바꾸는 것임
+
+  # as.Date를 쓰면 중간에 - 가 들어간다.
+  as.character(emp$HIRE_DATE)
+> as.character(emp$HIRE_DATE)
+[1] "20070621" "20080113" "20030917" "20040217"
+as.Date(as.character(emp$HIRE_DATE),format='%Y%m%d')
+> as.Date(as.character(emp$HIRE_DATE),format='%Y%m%d')
+[1] "2007-06-21" "2008-01-13" "2003-09-17" "2004-02-17"
+********************************************************

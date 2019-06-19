@@ -1,0 +1,33 @@
+[95]
+x <- c(2,10,6,4,3,NA,7,9,1)  x변수에 NA가 있는지를 검사하세요.
+
+[Answer]
+is.na(x)
+
+> is.na(x)
+[1] FALSE FALSE FALSE FALSE FALSE  TRUE FALSE FALSE FALSE
+
+
+
+
+
+[96]
+x 변수에 NA가 있는 인덱스 번호를 찾아 주세요.
+
+[Answer]
+which(is.na(x))
+
+
+
+
+
+[97]
+x 변수에 NA가 있으면 0으로 설정하세요
+
+[Answer]
+x[is.na(x)==TRUE] <- 0
+x[which(is.na(x))] <- 0
+
+또는
+
+ifelse(is.na(x),0,x)

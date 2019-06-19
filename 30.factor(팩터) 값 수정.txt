@@ -1,0 +1,19 @@
+[30]
+x factor형 목록이름중에 small 을 s로 수정하세요.
+
+[Answer]
+levels(x) == "small"
+
+levels(x)[levels(x) == "small"] <- "s"		# 여기서 levels(x) == "small" 는 index 번호라고 보면 됨
+
+x
+
+
+> levels(x) == "small"
+[1]  TRUE FALSE FALSE
+
+> levels(x)[levels(x) == "small"] <- "s"
+
+> x
+[1] large  medium s      s      large  medium
+Levels: s medium large

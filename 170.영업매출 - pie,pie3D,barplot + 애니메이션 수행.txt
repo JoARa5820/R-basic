@@ -1,0 +1,164 @@
+[170]
+모기업의 영업팀은 'A팀','B팀','C팀','D팀','E팀' 있습니다.
+영업팀별 영업 매출액은 90,45,70,67,85 있습니다.
+이 자료를 이용해서 barplot, pie, pie3D 그래프를 생성하세요.
+
+install.packages('jpeg')
+library(jpeg)
+
+team <- c('A팀','B팀','C팀','D팀','E팀')
+sale <- c(90,45,70,67,85)
+
+
+[Answer]
+<1>
+jpeg('c:/data/ex170_1.jpg',width=400,height=300,pointsize = 12)
+
+barplot(sale,names.arg=c('A팀','B팀','C팀','D팀','E팀'),col=rainbow(length(sale)),xlab='영업팀',ylab='매출액',main='영업팀별 영업매출액',ylim=c(0,100))
+
+dev.off()
+
+
+<2>
+jpeg('c:/data/ex170_2.jpg',width=400,height=300,pointsize = 12)
+
+# label <- paste(team,'(',round(sale/sum(sale)*100),"%)",sep = '')
+pie(sale,labels = label, main= "영업팀별 영업매출액",col=rainbow(length(sale)))
+
+dev.off()
+
+
+<3>
+library(plotrix)
+jpeg('c:/data/ex170_3.jpg',width=400,height=300,pointsize = 12)
+
+# legend('topright',legend=team,fill=rainbow(length(sale)))
+pie3D(sale,labels=label,explode=0.1,labelcex=0.8,main='영업팀별 영업매출액')
+
+dev.off()
+
+
+# 애니메이션 이용해서 내가 만든 차트 쭉 보여주기
+for(i in 1:3){
+  img <- paste('C:/data/ex170_',i,'.jpg',sep='')
+  img <- readJPEG(img)
+  
+  plot.new()
+  rect(0,0,1,1,col='white',border='white') # 그래픽 프레임 영역지정
+  rasterImage(img,0,0,1,1)
+  ani.pause() # 잠깐 대기한 후 화면 지우고 다시 출력
+}
+
+
+rasterImage(): 화면에 이미지 출력하는 함수
+rasterImage(image,xleft,ybottom,xright,ytop)
+image: 출력할 이미지 파일 이름
+xleft: 이미지 출력 위치(x축 왼쪽)
+ybottom: 이미지 출력 위치(y축 하단)
+xright: 이미지 출력 위치(x축 오른쪽)
+ytop: 이미지 출력 위치(y축 상단)
+
+
+
+
+
+
+
+[171]
+문제169번을 수행하면서 구이름.jpg형식으로 파일이 생성하도록 한후
+구이름.jpg를 이용해서 애니메이션을 수행하세요.
+
+
+[Answer]
+hos <- read.csv('c:/data/2016년_서울_주요구별_병원현황.csv',header=TRUE,stringsAsFactors=F)
+
+hm <- as.matrix(hos[,2:11])
+hm
+
+par(mfrow=c(2,5))	# 2행5열로 총 10개의 그래프 한번에 볼 수 있음
+
+
+for(i in 1:10){
+  
+  jpeg(paste('c:/data/colnames(hm)[',i,'].jpg'),width=400,height=300,pointsize = 12)
+
+  
+  bp <- barplot(hm[,i]/10,names.arg=hos[,1],beside=TRUE,ylim=c(0,35),
+                xlab='진료과목',ylab='병원수(10단위)',col=rainbow(length(hos[,1])),main=paste(colnames(hm)[i],' 병원수'),axes=TRUE)
+  
+  
+  text(bp,y=hm[,i]/10+1,labels=hm[,i]/10)
+  
+  abline(h=seq(0,35,5),col='black',lty=2)
+  
+  dev.off()
+  
+}
+
+
+for(i in 1:10){
+  img <- paste(paste('C:/data/colnames(hm)[',i,'].jpg'),sep='')
+  img <- readJPEG(img)
+  
+  plot.new()
+  rect(0,0,1,1,col='white',border='white') # 그래픽 프레임 영역지정
+  rasterImage(img,0,0,1,1)
+  ani.pause() # 잠깐 대기한 후 화면 지우고 다시 출력
+}
+
+
+- 구 이름으로 파일 생성하기
+for(i in 1:10){
+  
+  jpeg(paste('c:/data/',colnames(hm)[i],'.jpg'),width=400,height=300,pointsize = 12)
+
+  
+  bp <- barplot(hm[,i]/10,names.arg=hos[,1],beside=TRUE,ylim=c(0,35),
+                xlab='진료과목',ylab='병원수(10단위)',col=rainbow(length(hos[,1])),main=paste(colnames(hm)[i],' 병원수'),axes=TRUE)
+  
+  
+  text(bp,y=hm[,i]/10+1,labels=hm[,i]/10)
+  
+  abline(h=seq(0,35,5),col='black',lty=2)
+  
+  dev.off()
+  
+}
+
+
+또는
+
+library(jpeg)
+
+data1 <- read.csv("c:/data/2016년_서울_주요구별_병원현황.csv" , header=T)
+gu <- colnames(data1[2:11])
+
+
+for(i in 1:10){
+  jpeg(paste('c:/data/',gu[i],'.jpg',sep=""),width=400,height=300,pointsize=12)
+  barplot(data1[1:9,i+1] * 0.1 ,
+          main=paste(gu[i],"병원현황"),
+          axes=F,
+          ylab="병원수(단위:10개)",
+          xlab="", 
+          cex.names=0.85,
+          las=2,
+          ylim=c(0,40), 
+          col=rainbow(length(data1$표시과목)), 
+          border="white",
+          names.arg=data1$표시과목)
+  
+  axis(2,ylim=seq(0,40,10))
+  abline(h=seq(0,40,5),lty=2)
+  dev.off()
+}
+
+library(animation)
+
+for (i in gu) {
+  img <- paste("c:/data/",i,".jpg",sep="")
+  img <- readJPEG(img)
+  plot.new()
+  rasterImage(img,0,0,1,1)
+  ani.pause()
+}

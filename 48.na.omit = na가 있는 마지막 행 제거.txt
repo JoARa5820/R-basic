@@ -1,0 +1,23 @@
+## na.omit : na가 있는 마지막 행을 제거해줌
+
+[48]
+30번 부서 사원들이면서 급여는 3000이상인 사원들의 employee_id, salary, department_id를 출력하세요.
+
+[Answer]
+> emp[emp$DEPARTMENT_ID==30 & emp$SALARY>=3000,c('EMPLOYEE_ID','SALARY','DEPARTMENT_ID')]
+EMPLOYEE_ID SALARY DEPARTMENT_ID
+24         114  11000            30
+25         115   3100            30
+NA          NA     NA            NA
+
+> na.omit(emp[emp$DEPARTMENT_ID==30 & emp$SALARY>=3000,c('EMPLOYEE_ID','SALARY','DEPARTMENT_ID')])
+EMPLOYEE_ID SALARY DEPARTMENT_ID
+24         114  11000            30
+25         115   3100            30
+
+
+## na.omit : NA로만 이루어진 마지막 행을 제거해줌
+=> 비정형 데이터를 불러다 읽어들이고, 제약조건도 없으니 이러한 결과값이 나오기도 함
+왜 NA줄이 나올까?
+SALARY에는 NA가 (하나도)없고, DEPARTMENT_ID에는 NA가 있기 때문에
+DEPARTMENT_ID에 대해 조회했을때는 결과값이 NA로만 이루어진 줄이 나옴

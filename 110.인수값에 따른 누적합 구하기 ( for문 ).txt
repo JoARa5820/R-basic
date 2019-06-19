@@ -1,0 +1,39 @@
+[110]
+hap함수에 인자값을 입력하게 되면 1부터해서 입력숫자까지 누적합을 구하세요.
+
+[Answer]
+
+hap <- function(x){
+  res <- 0
+  for(i in 1:x){
+    res <- res+i
+    }
+    return(res)
+  }
+
+hap(10)
+
+
+
+
+
+
+[111]
+인수값에 따라 합을 구하세요.
+
+[Answer]
+
+hap(1,2)
+hap(1,2,3)
+hap(10,20,30,40)
+
+
+hap <- function(...){
+			x <- c(...)
+			sum <- 0
+			for(i in x){
+					sum <- sum+i
+				    }
+			return(sum)
+		     }
+ 

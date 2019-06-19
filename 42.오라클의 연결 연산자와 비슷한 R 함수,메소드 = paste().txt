@@ -1,0 +1,8 @@
+[42]
+오라클의 연결 연산자와 비슷한 R 함수,메소드는?
+
+[Answer]
+paste()
+
+                 오라클		R
+             ||,concat(a,b)   	paste(a,b,c...)

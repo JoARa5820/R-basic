@@ -1,0 +1,42 @@
+[139]
+fruits_sales.csv file 읽어 들인 후 년도별로 판매량 중에 가장 많은 판매를 한 년도를 출력해주세요.(tapply를 이용하세요)
+
+
+[Answer]
+a <- tapply(fruits_sales$qty,fruits_sales$year,sum)		# tapply : array 형식
+
+# array 형식의 행의 이름을 뽑아내야함(년도만 뽑아낼거니까)
+
+names(a)
+rownames(a)
+
+names(a[1])		# 특정한 행에 대해서만 뽑아내고 싶을 때 : 행의 번호
+rownames(a)[1]		# names와 rownames는 각각 행의 번호 쓰는 방법이 다름
+			# 행 이름 뽑아낼 때 주의하기
+names(a[a==max(a)])
+rownames(a)[a==max(a)]
+
+
+> names(a)
+[1] "2014" "2015" "2016" "2017"
+> rownames(a)
+[1] "2014" "2015" "2016" "2017"
+> names(a[1])
+[1] "2014"
+> rownames(a)[1]
+[1] "2014"
+> names(a[a==max(a)])
+[1] "2017"
+> rownames(a)[a==max(a)]
+[1] "2017"
+
+
+> a <- tapply(fruits_sales$qty,fruits_sales$year,sum)
+
+> a
+2014 2015 2016 2017 
+  24   35   39   50 
+
+> a[a==max(a)]
+2017 
+  50 

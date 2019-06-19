@@ -1,0 +1,56 @@
+[83]
+부서번호별로 급여에 총액을 출력하세요.
+
+[Answer]
+> aggregate(SALARY~DEPARTMENT_ID,emp,sum)
+DEPARTMENT_ID SALARY
+1             10   4400
+2             20  19000
+3             30  24900
+4             40   6500
+5             50 156400
+
+
+
+
+
+[84]부서번호, 직업별로 급여에 총액을 출력하세요.
+
+[Answer]
+aggregate(SALARY~DEPARTMENT_ID+JOB_ID,emp,sum)		# 여기선 NA값 포함시키면서 값 구해지는 것 아님
+
+
+
+
+
+[85]
+부서번호별 최대월급을 출력하는데 최대월급이 높은것부터 출력하세요.
+
+[Answer]
+library(doBy)
+orderBy(~-SALARY, aggregate(SALARY~DEPARTMENT_ID,emp,max))		# 앞에 - : 내림차순
+
+
+
+
+
+[86]
+직업별 인원수를 출력하세요.
+
+[Answer]
+aggregate(EMPLOYEE_ID ~ JOB_ID, emp, length)    
+
+# 오답
+aggregate(nchar(emp$SALARY)~JOB_ID,emp,sum)
+
+
+
+
+
+[90]
+job_id, hire_date(년도4자리) 총액 급여를 aggregate함수를 이용해서 생성하세요.
+
+[Answer]
+aggregate(SALARY~JOB_ID+format(HIRE_DATE,'%Y'),emp,sum)
+
+aggregate(SALARY~JOB_ID+year(as.Date(as.character(emp$HIRE_DATE),format='%Y')),emp,sum)

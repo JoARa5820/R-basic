@@ -1,0 +1,235 @@
+[180]
+seoul.txt ÆÄÀÏÀ» ´Ü¾îº° ºóµµ¼ö¸¦ È®ÀÎ ÇÏ½Ã°í wordcloud¸¦ ±×¸®¼¼¿ä.
+
+library(KoNLP)
+library(wordcloud)
+ 
+[Answer]
+# ´äÀº ¾Æ´Ô,Á¤Á¦ÀÛ¾÷ ÇØ¾ßÇÔ
+
+text <- readLines('c:/data/seoul.txt')
+text
+
+text1 <- SimplePos22(text)
+
+text1
+
+text_noun <- str_match(text1,'([A-Z°¡-ÆR]+)/N')
+
+
+d[,!names(d) %in% c('b','c')]	
+
+text_noun
+
+text_noun[,2]
+
+text_noun1 <- as.vector(na.omit(text_noun[,2]))
+
+text_noun1
+
+text_noun2 <- table(text_noun1)
+
+text_noun2
+
+# min.freq=2: ÃÖ¼Ò 2°³ ÀÌ»óÀÎ °Í¸¸ Ãâ·ÂÇÏÀÚ
+
+pal <- brewer.pal(8,'Dark2')
+wordcloud(names(text_noun2),freq=text_noun2,scale=c(5,0.5),min.freq=2,random.order=F,rot.per = .1,colors=pal)
+
+help("brewer.pal")
+
+-names: Ãâ·ÂÇÒ ´Ü¾îµé
+-freq: ºóµµ¼ö
+-scale: ±ÛÀÚÀÇ Å©±â c(Å«°ª,ÀÛÀº°ª)
+-min.freq: ÃÖ¼Ò ºóµµ¼ö¸¦ ÁöÁ¤
+-max.words: ÀÌ °ª ÀÌ»óÀÇ ºóµµ¼ö¸é »èÁ¦
+-random.order: Ãâ·ÂµÇ´Â ¼ø¼­¸¦ ÀÓÀÇ·Î ÁöÁ¤
+-rot.per: ´Ü¾î ¹èÄ¡
+-colors: Ãâ·ÂµÉ ´Ü¾îµéÀÇ »ö»ó
+
+
+# ¸ğ¾ç ¹Ù²ã¼­ ´Ü¾î ºóµµ¼ö¿¡ µû¸¥ ±×¸² º¸¿©ÁÖ±â
+wordcloud2(text_noun2,shape='pentagon')
+wordcloud2(text_noun2,shape='star')
+
+
+¶Ç´Â
+
+data1 <- readLines("c:/data/seoul.txt") 
+
+useSejongDic()
+
+buildDictionary(ext_dic="sejong",
+                user_dic=data.frame(c("ÃÊµîÇĞ±³","½ÃÀå´Ô","¾î¸°ÀÌÁı"),c("ncn")),replace_usr_dic=T)
+
+help("buildDictionary")
+data2 <- extractNoun(data1)
+data2
+
+head(unlist(data2), 30) 
+data3 <- unlist(data2) 
+data3 <- Filter(function(x) {nchar(x) >= 2} ,data3) # Filter¸Ş¼Òµå ÀÌ¿ë / ±ÛÀÚ ¼ö°¡ 2 ÀÌ»óÀÎ ¾Ö¸¸ data3¿¡ ³Ö°í ³ª¸ÓÁö´Â ¹ö¸®´Â ÇÔ¼ö¸¦ ¸¸µë.(³ª,³Ê,B°°Àº°Ç ¹ö¸²)
+data3
+data3 <- gsub("\\d+","", data3) # ¼ıÀÚ¸¦ Ã£¾Æ¼­ ¾ø¾ÖÀÚ
+data3 <- gsub("¼­¿ï½Ã","", data3) # ¼­¿ï½Ã °Ô½ÃÆÇ ºĞ¼®ÇÏ´Âµ¥ '¼­¿ï½Ã'¶ó´Â ´Ü¾î ³ª¿À¸é »¹ÂâÇÏ´Ï±î..¾ø¾ÖÀÚ
+data3 <- gsub("¼­¿ï","", data3)  
+data3 <- gsub("¿äÃ»","", data3)  
+data3 <- gsub("Á¦¾È","", data3) 
+data3 <- gsub(" ","", data3) # °ø¹é¹®ÀÚ Ã£¾Æ¼­ ¾ø¾ÖÀÚ
+data3 <- gsub("-","",data3) 
+data3 <- gsub("O+","",data3) # Æ¯Á¤ÇÑ ¹®ÀÚ°¡ ¿¬¼ÓµÇ°Ô ³ª¿À¸é ¾ø¾ÖÀÚ
+data3
+
+write(unlist(data3),"c:/data/seoul_2.txt") # ÆÄÀÏ·Î ¶³¾îÆ®·Á¹ö¸²(À§¿¡¼­ ¾ø¾Ö¸é¼­ ""·Î ´ëÃ¼µÈ ¾ÖµéÀÌ ¸¹±â ¶§¹®¿¡)
+data4 <- read.table("c:/data/seoul_2.txt")
+data4
+
+nrow(data4)
+wordcount <- table(data4) # ºóµµ¼ö Ã¼Å©
+wordcount
+
+head(sort(wordcount, decreasing=T),50) # ºóµµ¼ö Á¤·ÄÇÏ°í,Ã¼Å©ÇØ¼­ »óÀ§ 50°³¸¸ º¸ÀÚ
+
+library(RColorBrewer) # brewer.pal »ç¿ë½Ã
+palete <- brewer.pal(9,"Set3") 
+wordcloud(names(wordcount),
+          freq=wordcount,
+          scale=c(2,0.5),
+          random.order=F,
+          random.color=T,
+          colors=palete)
+
+
+## library(wordcloud2)
+## wordcloud2(wordcount)
+
+# display.brewer.all() # »ö»ó ´Ù º¸ÀÓ
+
+
+# brewer.pal(ÆÈ·¹Æ®ÀÇ »öÀÇ ¼ö,ÆÈ·¹Æ® ÀÌ¸§)
+
+palete <- brewer.pal(9,'Set3')
+
+Dark2(8),Accent(8),Paired(12),pastel1(9),pastel2(8),Set1(9),Set2(8),Set3(12)
+
+
+display.brewer.all()
+
+display.brewer.pal(8,'Dark2')
+
+
+
+
+
+
+
+[181]
+jeju.txt ºĞ¼®ÇÏ¼¼¿ä.
+
+[Answer]
+
+#########################################################################
+# ÆÄÀÏ·Î ´Ü¾î ºÒ·¯µéÀÌ±â
+useSejongDic()
+
+buildDictionary(ext_dic="sejong",
+                user_dic=data.frame(readLines('c:/data/Á¦ÁÖµµ°ü±¤Áö.txt'),"ncn"),replace_usr_dic=T)
+
+# help("buildDictionary")
+#########################################################################
+
+data1 <- readLines("c:/data/jeju.txt") 
+data1
+
+data2 <- extractNoun(data1)
+data2
+
+head(unlist(data2), 30) 
+data3 <- unlist(data2) 
+data3
+data3 <- Filter(function(x) {nchar(x) >= 2} ,data3)
+data3 <- gsub("1100","Ãµ¹é", data3)
+data3 <- gsub("1112","ÀÏÀÏÀÏÀÌ", data3)
+data3 <- gsub("\\d+","", data3) # ¼ıÀÚ¸¦ Ã£¾Æ¼­ ¾ø¾ÖÀÚ
+data3 <- gsub("\\(","", data3)
+data3 <- gsub(")","", data3)
+data3 <- gsub(",","", data3)
+data3 <- gsub("\\[","", data3)
+data3 <- gsub("]","", data3)
+data3 <- gsub(" ","", data3) # °ø¹é¹®ÀÚ Ã£¾Æ¼­ ¾ø¾ÖÀÚ
+data3 <- gsub("-","",data3) 
+data3 <- gsub("O+","",data3) # Æ¯Á¤ÇÑ ¹®ÀÚ°¡ ¿¬¼ÓµÇ°Ô ³ª¿À¸é ¾ø¾ÖÀÚ
+data3 <- gsub("Ãµ¹é","1100", data3)
+data3 <- gsub("ÀÏÀÏÀÏÀÌ","1112", data3)
+data3 <- gsub("/","", data3)
+data3 <- gsub("[[:punct:]]","", data3)
+data3 <- gsub("¡æ","", data3)
+data3 <- gsub("¡ß","",data3)
+data3 <- gsub("µµ¿ò","", data3)
+
+
+# data3 <- gsub("¤¾","",data3)
+# data3 <- gsub("¤·","",data3)
+
+data3
+
+class(data3)
+
+
+write(unlist(data3),"c:/data/jeju_2.txt")
+data4 <- readLines("c:/data/jeju_2.txt")
+data4
+class(data4)
+
+
+# wordcount <- table(data4)·Î È®ÀÎÇÑ ÈÄ À­ÁÙ·Î ¿Ã·Á¼­ ¹Ù²Ş
+data4 <- gsub("Á¦ÁÖ","", data4)  
+data4 <- gsub("ÇÏ½Ã","", data4) 
+data4 <- gsub("ÀÌ¿ë","", data4) 
+data4 <- gsub("ÇÏ°Ô","", data4) 
+data4 <- gsub("´Ù¾ç","", data4) 
+data4 <- gsub("Á¤»ó","", data4) 
+data4 <- gsub("°¡´É","", data4) 
+data4 <- gsub("´ëÀå","", data4) 
+data4 <- gsub("Áß°£","", data4)
+data4 <- gsub("Á¤µµ","", data4)
+data4 <- gsub("ÇÏ·ç","", data4)
+data4 <- gsub("ÃµÁ¦¿¬ÆøÆ÷","ÃµÁö¿¬ÆøÆ÷",data4)
+data4 <- gsub("°øÇ×","", data4)
+data4 <- gsub("¿¹¾à","", data4)
+data4 <- gsub("¼Ò¿ä","", data4)
+data4 <- gsub("Ãâ¹ß","", data4)
+data4 <- gsub("µµÂø","", data4)
+data4 <- gsub("±¸¼®","", data4)
+data4 <- gsub("Ã¹³¯","", data4)
+data4 <- gsub("µÑÂ°","", data4)
+data4 <- gsub("½Ã°£","", data4)
+data4 <- gsub("ÁÖµµ","", data4)
+data4 <- gsub("±ÙÃ³","", data4)
+data4 <- gsub("ÀÌ°÷","", data4)
+data4 <- gsub("»ı°¢","", data4)
+
+
+wordcount <- table(data4) # ºóµµ¼ö Ã¼Å©
+
+head(sort(wordcount, decreasing=T),50)
+
+class(wordcount)
+
+
+# library(RColorBrewer) # brewer.pal »ç¿ë½Ã
+# display.brewer.all()
+
+
+palete <- brewer.pal(8,"Dark2") 
+wordcloud(names(wordcount),
+          freq=wordcount,
+          scale=c(15,2),
+          min.freq=5,
+          random.order=F,
+          random.color=T,
+          colors=palete)
+
+
+# ¶óÀÎº° Áßº¹Á¦°Å-unique()
+¿ìµµ-gsup-value-true

@@ -1,0 +1,66 @@
+[100]
+1부터 10까지 합을 for문을 이용해서 구하세요.
+
+[Answer]
+s <- 0
+s
+for(i in 1:10){
+  s = s + i
+}
+s
+
+또는
+
+hap <- 0
+x <- 1:10
+for(i in x){hap <- hap+i}
+hap
+
+
+
+
+
+
+[101]
+1부터 100까지 전체합, 짝수합, 홀수합을 출력하세요.(for문은 하나만 사용,for문 안에 조건제어문 넣기)
+
+
+[Answer]
+
+total <- 0
+jjak <- 0
+hol <- 0
+
+
+for(i in 1:100){
+  if(i){total=total+i}
+  if(i%%2==0){jjak=jjak+i}
+  if(i%%2==1){hol=hol+i}
+}
+
+total
+jjak
+hol
+
+
+또는
+
+odd <- 0
+even <- 0
+total <- 0
+
+for(i in 1:100)
+{
+ total <- total+i
+ 
+ if(i%%2==0)
+ {
+	even <- even+i
+ } else {
+	odd <- odd+i
+ }
+}
+
+print(odd)
+print(even)
+print(total)

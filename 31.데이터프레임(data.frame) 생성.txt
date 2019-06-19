@@ -1,0 +1,23 @@
+[31]
+아래와 같은 모양의 변수를 생성하세요. 변수 이름은 df로 하세요.
+
+<화면출력>
+
+> df
+   name sql  plsql
+1  king  96     75
+2 smith  82     91
+3  jane  78     86
+
+
+[Answer]
+df <- data.frame(name=c('king','smith','jane'),sql=c(96,82,78),plsql=c(75,91,86),stringsAsFactors=FALSE)
+df
+
+
+> df <- data.frame(name=c('king','smith','jane'),sql=c(96,82,78),plsql=c(75,91,86),stringsAsFactors=FALSE)
+> df
+   name sql plsql
+1  king  96    75
+2 smith  82    91
+3  jane  78    86

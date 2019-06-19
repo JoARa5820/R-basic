@@ -1,0 +1,43 @@
+[125]
+아래 화면의 결과처럼 출력해주세요.
+
+           부서이름 부서별급여
+     Administration       4400
+          Marketing      19000
+         Purchasing      24900
+    Human Resources       6500
+           Shipping     156400
+                 IT      28800
+   Public Relations      10000
+              Sales     304500
+          Executive      63040
+            Finance      51608
+         Accounting      20308
+          소속부서X       7000
+         사원총급여     696456
+
+
+
+[Answer]
+
+x<-rbind(merge(aggregate(SALARY ~ DEPARTMENT_ID, emp, sum), dept, by="DEPARTMENT_ID")[,c("DEPARTMENT_NAME","SALARY")],list("소속부서X",sum(emp[is.na(emp$DEPARTMENT_ID),'SALARY'])),list("사원총급여",sum(emp$SALARY)))
+
+names(x)<-c("부서이름","부서별급여")
+
+x
+
+
+- 아래 셋을 rbind로 합쳐줌
+merge(aggregate(SALARY ~ DEPARTMENT_ID, emp, sum), dept, by="DEPARTMENT_ID"
+
+list("소속부서X",sum(emp[is.na(emp$DEPARTMENT_ID),'SALARY']))
+
+list("사원총급여",sum(emp$SALARY))
+
+
+- 이렇게 하면 절대절대절대 안됨!!
+sum(emp$SALARY) - sum(aggregate(SALARY~DEPARTMENT_ID,emp,sum)) : 는 부서id와 부서별salary의 숫자들을 sum 한것임. 즉, 10-4400, 20-19000...된 것임
+
+
+- 이렇게 해줘야 제대로 된 값 나옴
+sum(emp$SALARY) - sum(aggregate(SALARY~DEPARTMENT_ID,emp,sum)[2])

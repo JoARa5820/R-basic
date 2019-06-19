@@ -1,0 +1,22 @@
+[102]
+1부터 100까지 짝수합, 홀수합을 tapply를 이용해서 구하세요.
+
+홀수 짝수 
+2500 2550 
+
+
+[Answer]
+
+i <- 1:100
+holandjjak <- tapply(i,i%%2==0,sum)
+holandjjak
+names(holandjjak) <- c('홀','짝')
+holandjjak
+
+
+또는
+
+hap <- tapply(1:100,1:100%%2==0,sum)
+hap
+rownames(hap)=c('홀수','짝수')
+hap

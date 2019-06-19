@@ -1,0 +1,56 @@
+[136]
+fruits_sales.csv file 읽어 들인 후 과일 이름별 판매량, 판매합계를 구하세요.(tapply를 이용하세요)
+
+       qty price
+apple   44 66000
+banana  31 70000
+berry   52 95100
+orange  21 83000
+
+
+[Answer]
+# array형은 merge할 수 없음 / merge는 data.frame만 가능
+
+# tapply는 data.frame이나..를 가져다가 array형으로 반환해줌
+
+> x <- tapply(fruits_sales$qty,fruits_sales$name,sum)		# array형
+> y <- tapply(fruits_sales$price,fruits_sales$name,sum)		# array형
+
+
+# rownames(x),rownames(y) <- 이름 바꿔주기
+
+# array형식에선 과일 이름들은 row의 이름들이지 컬럼이름이 아님
+
+
+> x
+ apple banana  berry orange 
+    44     31     52     21 
+
+> y
+ apple banana  berry orange 
+ 66000  70000  95100  83000 
+
+
+> cbind(x,y)				# cbind(qty=x,price=y)로 해줘야 이름 바뀜
+        x     y
+apple  44 66000
+banana 31 70000
+berry  52 95100
+orange 21 83000
+
+
+> rbind(x,y)
+  apple banana berry orange
+x    44     31    52     21
+y 66000  70000 95100  83000
+
+
+> qty <- tapply(fruits_sales$qty,fruits_sales$name,sum)
+> price <- tapply(fruits_sales$price,fruits_sales$name,sum)
+
+> cbind(qty,price)
+       qty price		# tapply는 자동으로 name 없이 나오고
+apple   44 66000
+banana  31 70000
+berry   52 95100
+orange  21 83000

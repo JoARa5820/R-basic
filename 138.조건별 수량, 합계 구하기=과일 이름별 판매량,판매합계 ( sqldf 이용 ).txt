@@ -1,0 +1,29 @@
+[138]
+fruits_sales.csv file 읽어 들인 후 과일 이름별 판매량, 판매합계를 구하세요.(sqldf를 이용하세요)
+
+       qty price
+apple   44 66000
+banana  31 70000
+berry   52 95100
+orange  21 83000
+
+
+[Answer]
+> sqldf('select name,sum(qty),sum(price)
++ from fruits_sales
++ group by name')
+    name sum(qty) sum(price)
+1  apple       44      66000
+2 banana       31      70000
+3  berry       52      95100
+4 orange       21      83000
+
+
+> sqldf('select name as " ",sum(qty) qty,sum(price) price
++ from fruits_sales
++ group by name')
+         qty price
+1  apple  44 66000
+2 banana  31 70000
+3  berry  52 95100
+4 orange  21 83000

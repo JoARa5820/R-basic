@@ -1,0 +1,11 @@
+[140]
+fruits_sales.csv file 읽어 들인 후 년도별로 판매량 중에 가장 많은 판매를 한 년도를 출력해주세요.(aggregate를 이용하세요)
+
+
+[Answer]
+b <- aggregate(qty~year,fruits_sales,sum)		# 데이터 프레임
+
+b[b$qty==max(b$qty),'year']
+
+> b[b$qty==max(b$qty),'year']
+[1] 2017

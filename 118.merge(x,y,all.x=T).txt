@@ -1,0 +1,24 @@
+[118]
+커미션이 NA가 아닌 사원들의 last_name, commission_pct, department_id, department_name을 출력하세요.
+단 department_id가 NA인 사원도 출력해주세요.
+
+
+[Answer]
+x <- emp[!is.na(emp$COMMISSION_PCT),c("LAST_NAME","COMMISSION_PCT","DEPARTMENT_ID") ]
+y <- dept[,c("DEPARTMENT_ID","DEPARTMENT_NAME")]
+
+merge(x,y,all.x=T)[,c('LAST_NAME','COMMISSION_PCT','DEPARTMENT_ID','DEPARTMENT_NAME')]
+
+
+
+
+
+
+[119]
+사원의 last_name, 관리자 last_name을 출력해주세요. 관리자가 없는 사원도 출력해주세요.
+
+[Answer]
+w <- emp[,c('EMPLOYEE_ID','LAST_NAME','MANAGER_ID')]
+m <- emp[,c('EMPLOYEE_ID','LAST_NAME')]
+
+merge(w,m,by.x='MANAGER_ID',by.y='EMPLOYEE_ID',all.x=T)[,c('LAST_NAME.x','LAST_NAME.y')]

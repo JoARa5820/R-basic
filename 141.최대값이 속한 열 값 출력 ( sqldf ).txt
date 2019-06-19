@@ -1,0 +1,26 @@
+[141]
+fruits_sales.csv file 읽어 들인 후 년도별로 판매량 중에 가장 많은 판매를 한 년도를 출력해주세요.(sqldf를 이용하세요)
+
+
+[Answer]
+
+# sqldf는 그룹함수 중첩이 안되기 때문에 서브쿼리와 인나인뷰를 통해 풀어야함
+
+sqldf('select year
+	from fruits_sales
+	group by year
+	having sum(qty) = (select max(sumqty)
+				from (select sum(qty) sumqty
+					from fruits_sales
+					group by year))')
+
+
+> sqldf('select year
++ 	from fruits_sales
++       group by year
++       having sum(qty) = (select max(sumqty)
++       from (select sum(qty) sumqty
++       from fruits_sales
++       group by year))')
+  year
+1 2017

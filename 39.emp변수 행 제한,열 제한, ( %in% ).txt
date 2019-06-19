@@ -1,0 +1,27 @@
+[39]
+job이 AD_ASST, MK_MAN 인 사원들의 employee_id,last_name,job_id를 출력하세요.
+
+[Answer]
+str(emp)
+names(emp)
+emp[emp$JOB_ID %in% c('AD_ASST','MK_MAN'), c('EMPLOYEE_ID','LAST_NAME','JOB_ID')]
+
+
+
+
+
+[40]
+job이 ST_CLERK, SH_CLERK, SA_REP 아닌 사원들의 employee_id,last_name,job_id를 출력하세요.
+
+[Answer]
+emp[!emp$JOB_ID %in% c('ST_CLERK','SH_CLERK','SA_REP'), c('EMPLOYEE_ID','LAST_NAME','JOB_ID')]
+
+
+
+
+
+[41]
+부서번호가 10번,20번인 사원들의 last_name, salary, department_id를 출력하세요.
+
+[Answer]       
+emp[emp$DEPARTMENT_ID %in% c(10,20), c('LAST_NAME','SALARY','DEPARTMENT_ID')]

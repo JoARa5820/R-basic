@@ -1,0 +1,14 @@
+[142]
+fruits_sales.csv file 읽어 들인 후 과일 이름별 판매량, 판매합계를 구하세요.
+ddply함수를 이용하세요.
+
+
+[Answer]
+ddply(fruits_sales,'name',summarise,s_qty=sum(qty),s_price=sum(price))
+
+> ddply(fruits_sales,'name',summarise,s_qty=sum(qty),s_price=sum(price))
+    name s_qty s_price
+1  apple    44   66000
+2 banana    31   70000
+3  berry    52   95100
+4 orange    21   83000

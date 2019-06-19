@@ -1,0 +1,62 @@
+[68]
+df이름의 data frame 변수를 선언합니다.
+id 컬럼의 값은 100,101,102,103,104,  
+weight 컬럼의 값은 60,90,75,95,65, 
+size 컬럼의 값은 small, large, medium,large,small 값으로 생성하세요.
+
+[Answer]
+# id=100:104로 해도 됨
+
+df <- data.frame(id=c(100,101,102,103,104),weight=c(60,90,75,95,65),size=c('small', 'large', 'medium','large','small'))
+
+
+
+
+
+
+[69]
+df변수에 weight 컬럼을 기준으로 오름차순 정렬해서 df 변수에 값을 출력하세요.(order 함수를 이용하세요)
+
+[Answer]
+df[order(df['weight']),]
+df[order(df$weight),]
+
+
+
+
+
+
+[70]
+df변수에 size, weight 컬럼을 기준으로 오름차순 정렬하세요.(order 함수를 이용하세요)
+# order절에서 먼저 나오는 컬럼을 기준으로 정렬된다.
+# select * from df order by size,weight; 와 df[order(df$size,df$weight),] 는 같다.
+
+[Answer]
+df[order(df$size,df$weight),]
+
+> df[order(df$size,df$weight),]
+id weight   size
+2 101     90  large
+4 103     95  large
+3 102     75 medium
+1 100     60  small
+5 104     65  small
+
+
+# select * from df order by size,weight desc; 와 df[order(df$size, -df$weight),] 는 같다. (df$weight앞에 - 붙임)
+
+
+
+
+
+
+[71]
+df 변수에 있는 weight 컬럼을 기준으로 내림차순 정렬하세요.(order 함수를 이용하세요)
+
+[Answer]
+df[order(df['weight'],decreasing=TRUE),]
+
+또는
+
+df[order(df$weight,decreasing=TRUE),]
+df[order(-df$weight),]

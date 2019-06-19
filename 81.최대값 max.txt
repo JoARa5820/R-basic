@@ -1,0 +1,17 @@
+[81]
+최대월급을 출력하세요
+
+[Answer]
+max(emp$SALARY)
+max(emp$SALARY,na.rm=TRUE)
+
+
+
+
+
+[82]
+직업이 ST_CLERK 인 사원들중에 최대월급을 출력하세요
+
+[Answer]
+aggregate(SALARY~JOB_ID=='ST_CLERK',emp,max)
+max(emp[emp$JOB_ID == 'ST_CLERK',c('SALARY')])

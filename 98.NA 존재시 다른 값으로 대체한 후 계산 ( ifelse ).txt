@@ -1,0 +1,16 @@
+[98]
+last_name, salary, commission_pct, 
+       commission_pct NA 면 salary * 12,
+       아니면 (salary * 12) + (salary * 12 * commission_pct)을 수행하세요.
+
+
+[Answer]
+ifelse(is.na(emp$COMMISSION_PCT)==TRUE,emp$SALARY*12,(emp$SALARY*12)+(emp$SALARY*12*emp$COMMISSION_PCT))
+
+
+또는
+
+df <- data.frame(emp$LAST_NAME,emp$SALARY,emp$COMMISSION_PCT,
+ifelse(is.na(emp$COMMISSION_PCT),emp$SALARY*12,(emp$SALARY*12)+(emp$SALARY*12*emp$COMMISSION_PCT)))
+
+names(df) <- c('name','sal','comm','ann_sal')

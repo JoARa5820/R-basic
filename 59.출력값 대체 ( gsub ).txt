@@ -1,0 +1,12 @@
+[59]
+last_name, salary값을 화면에 출력할때 0은 * 로 출력하세요.
+
+[Answer]
+-gsub(0,'*',emp$SALARY)
+
+paste(emp$LAST_NAME,gsub(0,'*',emp$SALARY))
+
+> paste(emp$LAST_NAME,gsub(0,'*',emp$SALARY))
+  [1] "OConnell 26**"    "Grant 26**"       "Whalen 44**"      "Hartstein 13***"  "Fay 6***"        
+  [6] "Mavris 65**"      "Baer 1****"       "Higgins 12**8"    "Gietz 83**"       "King 29*4*"      
+ [11] "Kochhar 17***"    "De Haan 17***"    "Hunold 9***"      "Ernst 6***"       "Austin 48**" 

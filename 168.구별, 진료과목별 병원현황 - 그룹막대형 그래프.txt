@@ -1,0 +1,191 @@
+[168]
+2016년_서울_주요구별_병원현황.csv file을 읽어 들인후 구별로 진료과목별 병원현황을 그룹막대형 그래프로 만드세요.
+
+read.csv
+getwd()
+setwd("c:/data")
+getwd()
+
+hos <- read.csv('c:/data/2016년_서울_주요구별_병원현황.csv',header=TRUE,stringsAsFactors=F)
+
+
+[Answer]
+hm <- as.matrix(hos[,2:11])	# 여기서 hos[,1:11]으로 해버리면 1 때문에 숫자들까지 모두 char형식으로 바뀜, 따라서 문자열 빼고 matrix형식으로 바꾼 후 barplot에 넣어야함
+
+mode(hm)
+
+> hos[,1]
+[1] "내과"         "외과"         "정형외과"     "성형외과"     "산부인과"     "소아청소년과" "안과"         "이비인후과"  
+[9] "피부과"   
+
+
+bp <- barplot(hm,beside=TRUE, ylim=c(0,350),
+              xlab='지역', ylab='의원수',
+              col=rainbow(length(hos[,1])),
+              main='지역별 병원현황'
+              )
+legend('topright',
+       legend=hos[,1],
+       title='지역별 병원현황',
+       pch=15,
+       col=rainbow(length(hos[,1])),
+       cex=0.8, pt.cex=0.6)
+
+# text(bp,y=hm+10,labels=hm)
+# abline(h=seq(0,350,50),col='black',lty=2) # 수평선을 긋겠다. * lty : 선의 종류
+
+또는
+
+data1 <- read.csv("c:/data/2016년_서울_주요구별_병원현황.csv" , header=T)
+str(data1)
+par(mfrow=c(1,1))
+barplot(as.matrix(data1[1:9,2:11]),
+        main=paste("서울시 주요 구별 과목별 병원현황-2016년","\n",
+                   "출처[국민건강보험공단]") , ylab="병원수", beside=T ,
+        col=rainbow(length(data1$표시과목)),ylim=c(0,350))
+
+abline(h=seq(0,350,10),lty=3,lwd=0.2)
+
+legend('topright',
+       legend=data1$표시과목,
+       cex=0.8,
+       fill=rainbow(length(data1$표시과목)),
+       bg="yellow")
+
+
+
+
+
+
+
+[168.5]
+강남구 과목별 병원수만 막대형 그래프를 생성하세요.(단 10단위씩 표현하세요.)
+
+[Answer]
+hos
+
+hos[,1]
+
+hm2 <- as.matrix(hos[,2])
+
+bp <- barplot(hm2,names.arg=hos[,1],beside=TRUE,ylim=c(0,350),xlab='진료과목',ylab='병원수',col=rainbow(length(hos[,1])),main='강남구 과목별 병원수',axes=TRUE)
+
+legend('topright',
+       legend=hos[,1],
+       title='진료과목',
+       pch=15,
+       col=rainbow(length(hos[,1])),
+       cex=0.8, pt.cex=0.6)
+
+text(bp,y=hm2+10,labels=hm2)
+abline(h=seq(0,350,50),col='black',lty=2) # 수평선을 긋겠다. * lty : 선의 종류
+
+
+
+<10단위씩 묶어서 표현해보기>
+
+hm2 <- as.matrix(hos[,2])
+
+hm2/10
+
+bp <- barplot(hm2/10,names.arg=hos[,1],beside=TRUE,ylim=c(0,35),xlab='진료과목',ylab='병원수(10단위)',col=rainbow(length(hos[,1])),main='강남구 과목별 병원수',axes=TRUE)
+
+legend('topright',
+       legend=hos[,1],
+       title='진료과목',
+       pch=15,
+       col=rainbow(length(hos[,1])),
+       cex=0.6, pt.cex=0.6)
+
+
+text(bp,y=hm2/10+1,labels=hm2/10)
+
+abline(h=seq(0,35,5),col='black',lty=2) # 수평선을 긋겠다. * lty : 선의 종류
+
+
+또는
+
+barplot(data1$강남구*0.1,
+        main="강남구 병원현황",
+        axes=F,
+        ylab="병원수(단위:10개)",
+        cex.names=0.8,
+        las=2,
+        ylim=c(0,40), 
+        col=rainbow(length(data1$표시과목)), 
+        border="white",
+        names.arg=data1$표시과목)
+axis(2,ylim=seq(0,40,10))
+abline(h=seq(0,40,5),lty=2)
+
+
+
+
+
+
+
+[169]
+2016년_서울_주요구별_병원현황.csv file을 읽어 들인후 구별 진료과목에 해당하는 병원수를 막대형 그래프로 만드세요. 
+단 막대높이는 10개당 1개로 만드시고 막대그래프 프로그램은 한개를 가지고 모든 구별 막대그래프가 생성되도록 만드세요.
+
+
+[Answer]
+hm <- as.matrix(hos[,2:11])
+hm
+
+> dimnames(hm)[[2]][2]		# dimnames(hm)[[2]][i]
+[1] "강동구"
+
+> colnames(hm)[2]		# colnames(hm)[i]
+[1] "강동구"
+
+par(mfrow=c(2,5))	# 2행5열로 총 10개의 그래프 한번에 볼 수 있음
+
+
+for(i in 1:10){
+
+  bp <- barplot(hm[,i]/10,names.arg=hos[,1],beside=TRUE,ylim=c(0,35),
+                xlab='진료과목',ylab='병원수(10단위)',col=rainbow(length(hos[,1])),main=paste(colnames(hm)[i],' 병원수'),axes=TRUE)
+  
+  
+  text(bp,y=hm[,i]/10+1,labels=hm[,i]/10)
+  
+  abline(h=seq(0,35,5),col='black',lty=2)
+  
+}
+
+
+- 이거 넣으면 지저분해서 안넣음
+legend('topright',
+       legend=hos[,1],
+       title='진료과목',
+       pch=15,
+       col=rainbow(length(hos[,1])),
+       cex=0.6, pt.cex=0.6)
+
+
+또는
+
+data1 <- read.csv("c:/data/2016년_서울_주요구별_병원현황.csv" , header=T)
+gu <- colnames(data1[2:11])
+par(mfrow=c(2,5))
+for(i in 1:10){
+  barplot(data1[1:9,i+1] * 0.1 ,
+          main=paste(gu[i],"병원현황"),
+          axes=F,
+          ylab="병원수(단위:10개)",
+          xlab="", 
+          cex.names=0.85,
+          las=2,
+          ylim=c(0,40), 
+          col=rainbow(8), 
+          border="white",
+          names.arg=data1$표시과목)
+  
+  axis(2,ylim=seq(0,40,10))		# y축 그려주기
+  abline(h=seq(0,40,5),lty=2)
+}
+
+
+# axes(axis의 복수형) : barplot안에서 사용하는 옵션(y축을 지운다=FALSE, 그린다=TRUE)
+# axis : y축을 만드는 함수

@@ -1,0 +1,108 @@
+[107]
+mysentence 이름의 벡터 변수에 'Well begun is half done' 이 값을 입력한 후 공백문자를 기준으로 분리해서 word 변수에 입력하세요. 
+word 변수에 타입을 체크한 후 word 변수에 입력된 값의 수를 출력하세요.
+
+
+[Answer]
+
+mysentence <- 'Well begun is half done'
+
+mysentence
+
+> str(mysentence)
+chr "Well begun is half done"
+
+word <- strsplit(mysentence,split=" ")
+
+> word			# word에는 (큰)1번방 하나밖에 없는 것임
+[[1]]
+[1] "Well"  "begun" "is"    "half"  "done" 
+
+> class(word)
+[1] "list"
+
+> word[[1]][1]		# 1번방 안의 1번째꺼
+[1] "Well"
+
+> word[[1]][2]		# 1번방 안의 2번째꺼
+[1] "begun"
+
+
+> sapply(word,length)
+[1] 5 (개의 값이 들어있다.)
+
+
+## sapply(list값,함수적용)
+sapply(word=list값,length..mean...=함수)
+
+# 처음부터 unlist로 벡터로 만들어놓고 조작하는게 더 편함, list형은 조작이 까다로움
+
+
+
+
+
+
+
+[108]
+문제107에서 만든 word변수에 있는 값을  리스트 변수 letters에 하나씩 저장하세요.
+
+
+[Answer]
+
+> letters <- list(rep(NA,5))		# list변수 만들어놓기
+
+또는 letters <- list(NULL)
+
+
+> letters
+[[1]]
+[1] NA NA NA NA NA
+
+> for(i in 1:sapply(word,length)){
++   letters[[i]] <- word[[1]][i]
++ }
+
+
+> letters
+[[1]]
+[1] "Well"
+
+[[2]]
+[1] "begun"
+
+[[3]]
+[1] "is"
+
+[[4]]
+[1] "half"
+
+[[5]]
+[1] "done"
+
+
+> length(letters)
+[1] 5
+
+
+
+
+
+
+
+[109]
+문제108에서 생성한 letters 변수에 있는 값을 myword변수에 하나의 문장으로 넣어 주세요.
+
+
+[Answer]
+> myword
+[1] "Well begun is half done"
+
+
+> myword <- NULL
+
+> for(i in 1:length(letters)){
++   myword <- paste(c(myword,letters[[i]][1]),collapse=' ')
++ }
+
+> myword
+[1] "Well begun is half done"

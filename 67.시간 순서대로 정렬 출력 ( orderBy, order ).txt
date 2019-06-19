@@ -1,0 +1,12 @@
+[67]
+last_name, hire_date를  출력하는데 먼저 입사한 사원부터 출력하세요.
+
+[Answer]
+install.packages('doBy')
+library(doBy)
+orderBy(~HIRE_DATE,emp[,c('LAST_NAME','HIRE_DATE')])
+
+또는
+
+emp$HIRE_DATE <- as.Date(as.character(emp$HIRE_DATE),format='%Y%m%d')
+emp[order(emp$HIRE_DATE, decreasing=F), c("LAST_NAME","HIRE_DATE") ]

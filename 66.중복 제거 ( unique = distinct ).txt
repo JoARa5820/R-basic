@@ -1,0 +1,24 @@
+[66]
+부서번호를 중복제거 해주세요.
+
+[Answer]
+# unique = distinct
+
+> unique(emp$DEPARTMENT_ID)				# NA를 없애려면 na.omit
+ [1]  50  10  20  40  70 110  90  60 100  30  80  NA
+
+> na.omit(unique(emp$DEPARTMENT_ID))			# as.~ 하면 깔끔해짐
+ [1]  50  10  20  40  70 110  90  60 100  30  80
+attr(,"na.action")
+[1] 12
+attr(,"class")
+[1] "omit"
+
+> as.integer(na.omit(unique(emp$DEPARTMENT_ID)))
+ [1]  50  10  20  40  70 110  90  60 100  30  80
+
+> as.numeric(na.omit(unique(emp$DEPARTMENT_ID)))
+ [1]  50  10  20  40  70 110  90  60 100  30  80
+
+> as.character(na.omit(unique(emp$DEPARTMENT_ID)))	# 이렇게 char 형식으로 바꾸는건 안좋지만 암튼 as. 쓰면 깔끔해진다는 것을 위해 써봄
+ [1] "50"  "10"  "20"  "40"  "70"  "110" "90"  "60"  "100" "30"  "80" 

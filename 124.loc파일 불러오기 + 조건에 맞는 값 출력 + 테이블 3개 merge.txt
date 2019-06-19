@@ -1,0 +1,45 @@
+[124]
+loc.csv 파일을 loc 변수로 로드하세요.
+Toronto 지역에 근무하는 사원들의 LAST_NAME,SALARY,DEPARTMENT_ID,DEPARTMENT_NAME,STREET_ADDRESS 정보를 출력하세요.
+
+
+[Answer]
+loc <- read.csv('c:/data/loc.csv',header=TRUE,stringsAsFactors=F)
+
+x<- emp[,c('LAST_NAME','SALARY','DEPARTMENT_ID')]
+y<- dept[,c('LOCATION_ID','DEPARTMENT_ID','DEPARTMENT_NAME')]
+z<- loc[loc$CITY=='Toronto',c('LOCATION_ID','STREET_ADDRESS')]
+
+x
+y
+z
+
+merge(merge(x,y),merge(y,z))
+
+# 출력값 :
+  DEPARTMENT_ID LOCATION_ID DEPARTMENT_NAME LAST_NAME SALARY  STREET_ADDRESS
+1            20        1800       Marketing       Fay   6000 147 Spadina Ave
+2            20        1800       Marketing Hartstein  13000 147 Spadina Ave
+
+
+또는
+
+loc <- read.csv("c:/data/loc.csv",header=T,stringsAsFactors=F)
+
+t <- merge(loc[loc$CITY=='Toronto',],dept,by='LOCATION_ID')
+
+merge(emp, t, by='DEPARTMENT_ID')[, c('LAST_NAME','SALARY','DEPARTMENT_ID','DEPARTMENT_NAME','STREET_ADDRESS')]
+
+merge(emp, merge(loc[loc$CITY=='Toronto',],dept,by='LOCATION_ID'), by='DEPARTMENT_ID')[, c('LAST_NAME','SALARY','DEPARTMENT_ID','DEPARTMENT_NAME','STREET_ADDRESS')]
+
+l <- loc[loc$CITY=='Toronto',c('LOCATION_ID','STREET_ADDRESS')]
+d <- dept[,c('DEPARTMENT_ID','DEPARTMENT_NAME','LOCATION_ID')]
+e <- emp[,c('LAST_NAME','SALARY','DEPARTMENT_ID')]
+t <- merge(l,d,by='LOCATION_ID')
+
+merge(e,t, by='DEPARTMENT_ID')[, c('LAST_NAME','SALARY','DEPARTMENT_ID','DEPARTMENT_NAME','STREET_ADDRESS')]
+
+# 출력값 :
+  LAST_NAME SALARY DEPARTMENT_ID DEPARTMENT_NAME  STREET_ADDRESS
+1       Fay   6000            20       Marketing 147 Spadina Ave
+2 Hartstein  13000            20       Marketing 147 Spadina Ave

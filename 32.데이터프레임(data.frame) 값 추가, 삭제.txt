@@ -1,0 +1,22 @@
+[32]
+df변수에 james, 90, 80 추가 해주세요.
+
+<화면출력>
+
+> df
+   name sql plsql
+1  king  96    75
+2 smith  82    91
+3  jane  78    86
+4 james  90    80
+
+
+[Answer]
+df[4,] <- c('james',90,80)
+또는
+df <- rbind(df,c('james',90,80))
+또는
+df <- rbind(df,data.frame(name='james',sql=90,plsql=80))
+
+
+# 삭제하는 법 : df <- df[-4,]

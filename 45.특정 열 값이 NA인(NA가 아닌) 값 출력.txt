@@ -1,0 +1,16 @@
+[45]
+commission_pct에  NA 인 사원들의 last_name, salary, commission_pct를 출력하세요.
+
+[Answer]
+str(emp)
+emp[is.na(emp$COMMISSION_PCT),c('LAST_NAME','SALARY','COMMISSION_PCT')]
+
+
+
+
+
+[47]
+commission_pct에  NA가 아닌 사원들의 last_name, salary, commission_pct를 출력하세요.
+
+[Answer]
+emp[!is.na(emp$COMMISSION_PCT),c('LAST_NAME','SALARY','COMMISSION_PCT')]

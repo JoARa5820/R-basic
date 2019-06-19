@@ -1,0 +1,27 @@
+[93]
+emp 변수에 있는 데이터를 가지고 새로운 df변수를 생성하세요.
+last_name, salary, 급여가 10000  이상이면 A, 5000이상 10000보다 작으면 B 나머지는 C가 입력되어 있는 새로운 컬럼을 생성하세요.  
+컬럼이름은 name, sal, level 로 설정하세요.
+
+[Answer]
+df <- data.frame(emp$LAST_NAME, emp$SALARY, ifelse(emp$SALARY>=10000,"A",ifelse(emp$SALARY>=5000 & emp$SALARY<10000,"B","C")))
+names(df) <- c('name','sal','level')
+
+
+
+
+
+
+[94]
+x 변수에 1부터 100까지 입력한 후 짝수값은 자신의 값에 10을 곱한 값으로 수정하세요.
+
+[Answer]
+x <- 1:100
+x <- ifelse(x %% 2 ==0, x*10, x)
+x
+
+또는
+
+x <- 1:100
+x[x%%2==0] <- x[x%%2==0] *10
+x

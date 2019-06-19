@@ -1,0 +1,32 @@
+**********************************************************************************
+read.csv
+getwd()
+setwd("c:/data")
+getwd()
+emp <- read.csv("emp.csv",header=TRUE,stringsAsFactors=FALSE)
+dept <- read.csv('c:/data/dept.csv',header=TRUE,stringsAsFactors=F)
+loc <- read.csv('c:/data/loc.csv',header=TRUE,stringsAsFactors=F)
+
+str(emp)
+**********************************************************************************
+rm(list=ls())
+
+read.table
+read.csv
+getwd()
+setwd("c:/data")
+getwd()
+emp <- read.csv("emp.csv",header=TRUE,stringsAsFactors=FALSE)
+dept <- read.csv('c:/data/dept.csv',header=TRUE,stringsAsFactors=F)
+loc <- read.csv('c:/data/loc.csv',header=TRUE,stringsAsFactors=F)
+sales <- read.csv('c:/data/fruits_sales.csv',header=TRUE,stringsAsFactors=F)
+exam <- read.csv('c:/data/exam.csv',header=TRUE,stringsAsFactors=F)
+sta <- read.csv('c:/data/창업건수.csv',header=TRUE,stringsAsFactors=F)
+fin <- read.csv('c:/data/폐업건수.csv',header=TRUE,stringsAsFactors=F)
+sur <- read.csv('c:/data/survey.csv',header=FALSE,stringsAsFactors=F)
+sick <- read.csv('c:/data/1군전염병발병현황_년도별.csv',header=TRUE,stringsAsFactors=F)
+
+cctv <- read.csv('c:/data/전국cctv표준데이터.csv',header=TRUE,stringsAsFactors=F)
+
+hos <- read.csv('c:/data/2016년_서울_주요구별_병원현황.csv',header=TRUE,stringsAsFactors=F)
+**********************************************************************************

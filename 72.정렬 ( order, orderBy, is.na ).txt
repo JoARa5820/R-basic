@@ -1,0 +1,64 @@
+[72]
+30번 부서 사원들의 last_name, salary를  출력하세요.
+단 salary를 기준으로 내림차순정렬하세요.
+
+
+[Answer]
+x <- emp[emp$DEPARTMENT_ID ==30, c("LAST_NAME", "SALARY")]
+str(x)
+na.omit(x[order(x$SALARY, decreasing=T),])
+
+library(doBy)
+orderBy(~-SALARY,emp[emp$DEPARTMENT_ID==30,c('LAST_NAME','SALARY')]) # NA출력됨
+
+# 오답:
+na.omit(emp[order(emp$SALARY,decreasing=TRUE) & emp$DEPARTMENT_ID==30,c('LAST_NAME','SALARY')])--???무조건 내림차순만 나옴
+
+
+
+
+
+
+[73]
+job_id가  ST_CLERK 가 아닌 사원들의 last_name, salary, job_id를 출력하는데 급여가 높은 사원부터 출력되게하세요.(orderBy 함수를 이용하세요)
+
+[Answer]
+library(doBy)
+orderBy(~-SALARY,emp[emp$JOB_ID != 'ST_CLERK',c('LAST_NAME','SALARY','JOB_ID')])
+
+
+
+
+
+
+[74]
+사원 last_name, salary, commission_pct를 출력하는데 commission_pct를 기준으로 오름차순정렬하세요.(orderBy를 이용하세요)
+
+[Answer]
+orderBy(~COMMISSION_PCT,emp[,c('LAST_NAME','SALARY','COMMISSION_PCT')])
+
+
+
+
+
+
+[75]
+commission_pct를 받고 있는 사원들의 last_name, salary, commission_pct를 출력하는데 commission_pct를 기준으로 오름차순정렬하세요.(orderBy를 이용하세요)
+
+[Answer]
+# !is.na(emp$COMMISSION_PCT)
+
+orderBy(~COMMISSION_PCT,emp[!is.na(emp$COMMISSION_PCT),c('LAST_NAME','SALARY','COMMISSION_PCT')])
+
+
+
+
+
+
+[79]
+last_name과 연봉을 출력하는데 연봉이 높은것부터 출력하세요 
+
+[Answer]
+df[order(df$연봉,decreasing=TRUE),c('이름','연봉')]
+
+orderBy(~-연봉,data.frame(emp$LAST_NAME,연봉=emp$SALARY*12))

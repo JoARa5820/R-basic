@@ -1,0 +1,22 @@
+[12]
+lst 변수에  blood = 'A' 추가하세요.
+
+
+[Answer]
+
+lst$blood <- 'A'
+
+> lst$blood <- 'A'
+
+> lst
+$`name`
+[1] "king"
+
+$height
+[1] "180"
+
+$weight
+[1] "70"
+
+$blood
+[1] "A"

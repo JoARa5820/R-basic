@@ -1,0 +1,119 @@
+# 173~175가 연관 문제
+
+[173]
+아래와 같은 결과를 출력하도록 SQL문을 작성하세요.
+
+Job                     Dept 10    Dept 20    Dept 30    Dept 40    Dept 50    Dept 60    Dept 70    Dept 80    Dept 90   Dept 100
+-------------------- ---------- ---------- ---------- ---------- ---------- ---------- ---------- ---------- ---------- ----------
+AC_MGR
+AC_ACCOUNT
+IT_PROG                                                                          28800
+ST_MAN                                                                36400
+AD_ASST                       0
+PU_MAN                                          11000
+SH_CLERK                                                              64300
+AD_VP                                                                                                     35700
+FI_ACCOUNT                                                                                                           39600
+MK_MAN                               13000
+PR_REP                                                                                      10000
+FI_MGR                                                                                                               12008
+PU_CLERK                                        13900
+SA_MAN                                                                                                 61000
+MK_REP                                6000
+AD_PRES                                                                                                   26400
+SA_REP                                                                                                243500
+HR_REP                                                      6500
+ST_CLERK                                                              55700
+
+
+- SQL에서 수행하기
+SELECT job_id "Job",
+SUM(DECODE(department_id , 10, salary)) "Dept 10",
+SUM(DECODE(department_id , 20, salary)) "Dept 20",
+SUM(DECODE(department_id , 30, salary)) "Dept 30",
+SUM(DECODE(department_id , 40, salary)) "Dept 40",
+SUM(DECODE(department_id , 50, salary)) "Dept 50",
+SUM(DECODE(department_id , 60, salary)) "Dept 60",
+SUM(DECODE(department_id , 70, salary)) "Dept 70",
+SUM(DECODE(department_id , 80, salary)) "Dept 80",
+SUM(DECODE(department_id , 90, salary)) "Dept 90",
+SUM(DECODE(department_id , 100, salary)) "Dept 100"
+FROM employees
+GROUP BY job_id;
+
+
+- SQL에서 수행하기
+SELECT *
+FROM   (SELECT department_id, job_id, salary
+              FROM   employees)
+PIVOT (SUM(salary)  FOR department_id  IN  (10,20,30,40,50,60,70,80,90,100,110));
+# PIVOT테이블 사용: in 뒤에 피봇테이블의 열을 나열
+
+
+- SQL에서 수행하기
+SELECT *
+FROM   (SELECT nvl(department_id,0) dept_id, job_id, salary
+              FROM   employees)
+ PIVOT (SUM(salary)  FOR dept_id  IN  (10,20,30,40,50,60,70,80,90,100,110,0));
+
+
+
+
+
+
+
+[174]
+문제 173번에서 만든 SQL문을 R에서 오라클로 접속하셔서 수행하세요.
+
+[Answer]
+emp_pivot <- dbGetQuery(conn,'SELECT *
+  FROM   (SELECT nvl(department_id,0) dept_id, job_id, salary
+          FROM   employees)
+PIVOT (SUM(salary)  FOR dept_id  IN  (10,20,30,40,50,60,70,80,90,100,110,0))')
+
+
+-셀렉문 쓸 때 싱글 ' 를 써줘야함, 공백문자 포함하는 Dept 10같은 애들 쓸 때 더블 " 를 써줬기 때문에 " 쓰면 충돌되버림
+
+emp_pivot <- dbGetQuery(conn,'SELECT job_id "Job",
+SUM(DECODE(department_id , 10, salary)) "Dept 10",
+SUM(DECODE(department_id , 20, salary)) "Dept 20",
+SUM(DECODE(department_id , 30, salary)) "Dept 30",
+SUM(DECODE(department_id , 40, salary)) "Dept 40",
+SUM(DECODE(department_id , 50, salary)) "Dept 50",
+SUM(DECODE(department_id , 60, salary)) "Dept 60",
+SUM(DECODE(department_id , 70, salary)) "Dept 70",
+SUM(DECODE(department_id , 80, salary)) "Dept 80",
+SUM(DECODE(department_id , 90, salary)) "Dept 90",
+SUM(DECODE(department_id , 100, salary)) "Dept 100"
+FROM employees
+GROUP BY job_id')
+
+
+
+
+
+
+
+[175]
+R에서 오라클에 있는 EMPLOYEES 테이블을 읽어 들인 후 R함수를 이용하셔서
+문제 173번과 동일한 결과를 출력하세요.
+
+
+[Answer]
+empdf <- dbReadTable(conn, "EMPLOYEES")
+
+<NA로 나옴>
+tapply(empdf$SALARY, list(empdf$JOB_ID, empdf$DEPARTMENT_ID), sum)
+
+<0으로 나옴>
+tapply(empdf$SALARY, list(empdf$JOB_ID, empdf$DEPARTMENT_ID), sum,default=0)
+
+<또는 xtabs - 내가 한 것>
+xtabs(SALARY~JOB_ID+DEPARTMENT_ID,emp)
+
+
+select *
+frow(select department_id,job_id
+	frow employees)
+pivot(count(*) for department_id in
+	(10,20,30,40,50,60,70,80,90,100,110));

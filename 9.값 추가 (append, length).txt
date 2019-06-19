@@ -1,0 +1,35 @@
+[9]
+x변수에 11숫자를 제일 뒤에 입력하세요. 단 append와 length를 이용하세요.
+
+
+[Answer]
+
+length(x)
+
+x <- append(x,11,after=length(x))
+
+
+> length(x)
+[1] 5
+
+> x <- append(x,11,after=length(x)) 			# 여기서 after = 5 대신 length(x)라고 써도 됨
+> x
+[1] 10 30  5 70 90 11
+
+
+
+
+
+[16]
+x 변수에 벡터값 1,2,3,5,6 을 입력한 후 3번째 요소 뒤에 4를 입력하세요.
+
+[Answer]
+x <- c(1,2,3,5,6)
+
+x <- append(x,4,after=3)		# after 안쓰면 제일 뒤에 값이 넣어짐
+
+> x <- c(1,2,3,5,6)
+> x
+[1] 1 2 3 5 6
+> append(x,4,after=3)
+[1] 1 2 3 4 5 6

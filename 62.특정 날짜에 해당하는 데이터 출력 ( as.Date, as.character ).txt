@@ -1,0 +1,11 @@
+[62]
+2002-06-07에 입사한 사원들의 last_name, hire_date를  출력하세요.
+
+
+[Answer]
+
+emp[emp$HIRE_DATE==20020607,c('LAST_NAME','HIRE_DATE')]
+-> 이렇게 해도 상관은 없지만, 그럼 숫자형이기 때문에 날짜계산이 안되고 말그대로 숫자계산밖에 안됨. 따라서 날짜는 날짜형식으로 바꾸는게 좋음
+
+emp[as.Date(as.character(emp$HIRE_DATE),format='%Y%m%d')==as.Date('2002-06-07'),c('LAST_NAME','HIRE_DATE')]
+-> as.Date는 문자를 날짜로 바꾸는 것임

@@ -1,0 +1,64 @@
+[90]
+job_id, hire_date(년도4자리) 총액 급여를 aggregate함수를 이용해서 생성하세요.
+
+
+[Answer]
+
+> aggregate(SALARY~JOB_ID+year(as.Date(as.character(emp$HIRE_DATE),format='%Y')),emp,sum)
+       JOB_ID year(as.Date(as.character(emp$HIRE_DATE), format = "%Y")) SALARY
+1       AD_VP                                                      2001  17000
+2  AC_ACCOUNT                                                      2002   8300
+3      AC_MGR                                                      2002  12008
+4  FI_ACCOUNT                                                      2002   9000
+5      FI_MGR                                                      2002  12008
+6      HR_REP                                                      2002   6500
+7      PR_REP                                                      2002  10000
+8      PU_MAN                                                      2002  11000
+9     AD_ASST                                                      2003   4400
+10    AD_PRES                                                      2003  29040
+...
+
+# 90번 문제처럼 보는 것보다 아래처럼 피벗테이블 만들어서 보는게 더 좋음
+
+
+
+
+
+
+[91]
+job_id, hire_date(년도4자리) 총액 급여를 tapply함수를 이용해서 생성하세요.
+단 NA 대신에 0 으로 출력하세요.
+
+
+[Answer]
+
+x <- tapply(emp$SALARY,list(emp$JOB_ID,format(emp$HIRE_DATE,'%Y')),sum)
+x[is.na(x)==T] <- 0
+x
+
+x <- tapply(emp$SALARY,list(emp$JOB_ID,format(emp$HIRE_DATE,'%Y')),sum, default=0)
+x
+
+x <- tapply(emp$SALARY,data.frame(emp$JOB_ID,format(emp$HIRE_DATE,'%Y')),sum)
+x[is.na(x)==T] <- 0
+x
+
+x <- tapply(emp$SALARY,data.frame(emp$JOB_ID,format(emp$HIRE_DATE,'%Y')),sum, default=0)
+x
+
+
+또는
+
+tapply(emp$SALARY,list(emp$JOB_ID,year(as.Date(as.character(emp$HIRE_DATE),format='%Y'))),sum,default=0)
+
+
+> tapply(emp$SALARY,list(emp$JOB_ID,year(as.Date(as.character(emp$HIRE_DATE),format='%Y'))),sum,default=0)
+            2001  2002  2003  2004  2005  2006  2007  2008
+AC_ACCOUNT     0  8300     0     0     0     0     0     0
+AC_MGR         0 12008     0     0     0     0     0     0
+AD_ASST        0     0  4400     0     0     0     0     0
+AD_PRES        0     0 29040     0     0     0     0     0
+AD_VP      17000     0     0     0 17000     0     0     0
+FI_ACCOUNT     0  9000     0     0 15900  7800  6900     0
+FI_MGR         0 12008     0     0     0     0     0     0
+HR_REP         0  6500     0     0     0     0     0     0

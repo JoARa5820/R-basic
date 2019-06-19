@@ -1,0 +1,126 @@
+[144]
+부서별 급여의 총액을 pie chart를 생성하세요.
+
+[Answer]
+
+emp<-read.csv("C:/Data/emp.csv",header=T)
+a<-aggregate(SALARY~DEPARTMENT_ID,emp,sum)
+pie(a$SALARY, labels = a$DEPARTMENT_ID)
+ 
+pie(a$SALARY, labels = paste(a$DEPARTMENT_ID,'부서', a$SALARY, '$',sep = ' '),cex = 0.5)
+ 
+df<-aggregate(SALARY~DEPARTMENT_ID,emp,sum)
+
+label1<- paste(df$DEPARTMENT_ID,"부서",sep = '')
+label2<- paste(df$SALARY,"만원",sep ='')
+
+pie(df$SALARY,labels = label2, main= "부서별 총액 급여",col=rainbow(length(df$SALARY)))
+
+
+# 범례
+df<-aggregate(SALARY~DEPARTMENT_ID,emp,sum)
+
+label1<- paste(df$DEPARTMENT_ID,"부서",sep = '')
+label2<- paste(df$SALARY,"만원",sep ='')
+
+pie(df$SALARY,labels = label2, main= "부서별 총액 급여",col=rainbow(length(df$SALARY)))
+legend(1,1,label1,fill=rainbow(length(df$SALARY)))
+ 
+3D plot
+library(plotrix)
+
+pie3D(s,labels = label, explode = 0.1, labelcex = 0.8)
+ 
+# explode : 부채꼴들의 간격
+# labelcex : label의 문자크기
+
+
+
+
+
+
+
+[145]
+성별 현황을 조사 자료를 이용하여 성별 인구 비율을 원형 차트로 만드세요.
+
+성별 현황
+
+구분	조사수
+----	------
+남자	226965
+여자	241319	
+
+
+[Answer]
+
+h <- c(226965,241319)
+mw <- c('남자','여자')
+
+pie(h, labels=mw, main='성별 현황',col=c('red','blue'))
+
+p <- round(h/sum(h)*100)
+
+label <- paste(mw,p)
+label
+[1] "남자 48" "여자 52"
+
+label <- paste(label,'%',sep="")
+label
+[1] "남자 48%" "여자 52%"
+
+pie(h, labels=label, main='성별 현황',col=c('red','blue'))
+
+
+또는
+
+gender <- c('남자','여자')
+survey <- c(226965,241319)
+proportion <- round((survey/sum(survey)*100))
+label <- paste(proportion,'%',sep='')
+
+pie(survey,labels=label,main='성별 현황',col=c('blue','red'))
+
+legend('topright',legend=gender,cex=0.6,fill=c('blue','red'))
+
+--------------------------
+## 색상 종류 보는 방법
+## colors()
+--------------------------
+
+## install.packages('plotrix')
+## library(plotrix)
+
+
+pie3D(proportion,labels=label,start=2,explode=0.1,labelcex=0.8,main='성별 현황',col=c('blue','red'))
+legend('topright',legend=gender,cex=0.6,fill=c('blue','red'))
+
+
+p <- pie3D(proportion,labels=label,start=2,explode=0.1,labelcex=0.8,main='성별 현황',col=c('blue','red'))
+
+pie3D.labels(p,labels=gender,labelrad=0.5,labelcex=0.7,labelcol='whitesmoke')
+
+
+
+
+
+
+
+[158]
+2014 년도 업종별 창업 비율을 원형 그래프로 생성하세요.
+
+[Answer]
+
+x_2014 <- sta[sta$년도==2014,(2:8)] # 또는 x_2014 <- sta[sta$년도==2014,-1]
+
+class(x_2014)
+
+sta_label1 <- round(x_2014/sum(x_2014)*100,1)
+
+sta_label1 
+t(sta_label1) # t라는 전치행렬 : 가로모양을 세로모양으로 바꿔줌
+
+sta_label2 <- paste(colnames(sta_label1),t(sta_label1),'%')
+
+pie(t(sta_label1),col=rainbow(7),labels=sta_label2,main='2014년 업종별 창업비율')
+
+pie3D(t(sta_label1),col=rainbow(7),labels=sta_label2,main='2014년 업종별 창업비율',labelcex=0.7,explode=0.1)

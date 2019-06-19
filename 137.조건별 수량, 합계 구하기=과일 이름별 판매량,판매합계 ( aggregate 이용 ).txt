@@ -1,0 +1,25 @@
+[137]
+fruits_sales.csv file 읽어 들인 후 과일 이름별 판매량, 판매합계를 구하세요.(aggregate를 이용하세요)
+
+       qty price
+apple   44 66000
+banana  31 70000
+berry   52 95100
+orange  21 83000
+    
+
+[Answer]
+# aggregate는 data.frame 형식으로 반환해줌
+
+> x <- aggregate(qty~name,fruits_sales,sum)		# data.frame 형식으로 만들어짐
+> y <- aggregate(price~name,fruits_sales,sum)
+
+
+# data.frame형식만 merge 가능 
+
+> merge(x,y)			# name이름을 행 이름으로 넣어주면 됨
+    name qty price
+1  apple  44 66000
+2 banana  31 70000
+3  berry  52 95100
+4 orange  21 83000

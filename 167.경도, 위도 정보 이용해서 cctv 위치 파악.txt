@@ -1,0 +1,26 @@
+[167]
+csv파일에 있는 경도, 위도 정보 이용해서 cctv 위치 파악
+
+# 파일 안읽힐때 해결법: file->import dataset->from text(base)
+# cctv<-read.csv(choose.files(),header=T) 하면 파일 불러오기도 가능
+# 찍을 수 있는 갯수가 정해져있음(조각내서 찍어서 붙여주는 수 밖에 없음)
+
+# install.packages("ggplot2")
+# install.packages("ggmap")
+# library(ggplot2)  # geom_point
+# library(ggmap)
+
+
+[Answer]
+df <- read.csv("c:/data/서울특별시_강남구_CCTV_20180510.csv", header=TRUE, stringsAsFactors=F)
+str(df)
+head(df)
+df <- df[grep('테헤란로',df$소재지도로명주소),]
+df <- data.frame(name=df$소재지도로명주소,lat=df$위도, lon=df$경도)
+head(df)
+tail(df)
+cen <- c(mean(df$lon),mean(df$lat))
+ggmap(get_googlemap(center=cen,maptype = "roadmap",zoom=13,markers=data.frame(df$lon,df$lat)))
+
+map <- get_googlemap(center=cen,maptype = "roadmap",zoom=14)
+ggmap(map)+geom_point(data=df,aes(x=lon,y=lat),size=3,alpha=0.3,color="red")

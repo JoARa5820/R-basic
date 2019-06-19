@@ -1,0 +1,54 @@
+[64]
+사원의 last_name, 입사한 요일을 출력하세요.
+
+[Answer]
+# 분석 전에 가공 먼저 하기 => 이게 정답
+
+emp$HIRE_DATE <- as.Date(as.character(emp$HIRE_DATE),format='%Y%m%d')
+data.frame(emp$LAST_NAME, weekdays(emp$HIRE_DATE))
+
+#-----------------------------------------------------------------------------#
+
+# 분석 전 가공 안한 것: 
+
+- 입사한 요일:
+  weekdays(as.Date(as.character(emp$HIRE_DATE),format='%Y%m%d'))
+
+> paste(emp$LAST_NAME,weekdays(as.Date(as.character(emp$HIRE_DATE),format='%Y%m%d')))
+  [1] "OConnell 목요일"    "Grant 일요일"       "Whalen 수요일"      "Hartstein 화요일"  
+  [5] "Fay 수요일"         "Mavris 금요일"      "Baer 금요일"        "Higgins 금요일"    
+
+
+# as.Date(as.character(emp$HIRE_DATE),format='%Y%m%d')에서 format='%Y-%m-%d'로 하면 오류남, HIRE_DATE가 20020101식으로 되있어서인듯
+
+
+
+
+
+
+[65]
+오늘 날짜를 기준으로  100개월 되는 날짜의 요일을 출력하세요. 
+
+[Answer]
+
+# 문제 만든 날 기준이라 토요일로 나오는 것
+
+> format( Sys.Date() + months(100),'%A')
+[1] "토요일"
+
+> wday(Sys.Date() + months(100),label=T)
+[1] 토
+Levels: 일 < 월 < 화 < 수 < 목 < 금 < 토
+
+
+또는
+
+> now() + months(100)
+[1] "2026-11-26 15:02:35 KST"
+> Sys.Date() + months(100)
+[1] "2026-11-26"
+
+> weekdays(now() + months(100))
+[1] "목요일"
+> weekdays(Sys.Date() + months(100))
+[1] "목요일"

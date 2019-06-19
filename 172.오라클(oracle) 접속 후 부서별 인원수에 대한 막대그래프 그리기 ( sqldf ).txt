@@ -1,0 +1,111 @@
+[172]
+R에서 오라클 접속한 후 부서별 인원수에 대한 막대그래프 그리세요.
+
+[Answer]
+install.packages("RJDBC")
+library(RJDBC)
+jdbcDriver <- JDBC(driverClass="oracle.jdbc.OracleDriver", classPath="C:/r/ojdbc6.jar")
+conn <- dbConnect(jdbcDriver, "jdbc:oracle:thin:@localhost:1521/xe", "hr",  "hr") 
+emp <- dbGetQuery(conn, "select * from employees")
+dept <- dbGetQuery(conn, "select * from departments")
+
+
+<부서정보가 있는 데이터만>
+ag <- aggregate(EMPLOYEE_ID~DEPARTMENT_ID,emp,length)
+
+class(ag)
+
+bp <- barplot(ag$EMPLOYEE_ID,names.arg = ag$DEPARTMENT_ID,ylim=c(0,50),xlab='부서',ylab='도수',main='부서별 인원수',col=rainbow(length(ag$DEPARTMENT_ID)))
+
+legend('topright',legend=paste(ag$DEPARTMENT_ID,'부서'),fill=rainbow(length(ag$DEPARTMENT_ID)),cex=0.5)
+
+label <- paste(ag$EMPLOYEE_ID)
+
+text(x=bp,y=ag$EMPLOYEE_ID,labels=label,pos=3)
+
+
+<부서정보가 없는 데이터까지>
+ag <- aggregate(EMPLOYEE_ID~DEPARTMENT_ID,emp,length)
+
+class(ag)
+
+busu <- c('부서없음',length(emp[which(is.na(emp$DEPARTMENT_ID)),'EMPLOYEE_ID']))
+busu
+
+busu <- as.numeric(busu)
+
+class(busu)
+
+a <- rbind(ag,busu)
+a
+
+class(a)
+mode(a)
+
+bp <- barplot(a$EMPLOYEE_ID,names.arg = c(ag$DEPARTMENT_ID,'부서없음'),ylim=c
+              (0,50),xlab='부서',ylab='도수',main='부서별 인원수',col=rainbow(length(a
+                                                                           $DEPARTMENT_ID)))
+
+legend('topright',legend=paste(c(ag$DEPARTMENT_ID,'부서없음')),fill=rainbow(length(a$DEPARTMENT_ID)),cex=0.5)
+label <- paste(a$EMPLOYEE_ID)
+text(x=bp,y=a$EMPLOYEE_ID,labels=label,pos=3)
+
+
+또는
+
+library(RJDBC)
+jdbcDriver <- JDBC(driverClass="oracle.jdbc.OracleDriver", classPath="C:/r/ojdbc6.jar")
+conn <- dbConnect(jdbcDriver, "jdbc:oracle:thin:@localhost:1521/xe", "hr",  "hr")
+
+df <- dbGetQuery(conn, "SELECT nvl(department_name,'소속부서(x)') dept_name, count(*) cnt
+                        FROM employees e , departments d 
+                        WHERE e.department_id = d.department_id(+)
+                        GROUP BY nvl(department_name,'소속부서(x)')")
+
+bp <- barplot(df$CNT,
+              names.arg=df$DEPT_NAME,
+              main='부서별 사원 수',
+              col=terrain.colors(length(df$DEPT_NAME)),
+              ylab='사원수(명)',
+              ylim=c(0,50),
+              las=2)
+
+text(x=bp, y=df$CNT, labels=df$CNT, pos=3)
+
+
+df <- dbGetQuery(conn, "SELECT nvl(department_name,'소속부서(x)') dept_name, count(*) cnt
+                        FROM employees e LEFT OUTER JOIN departments d 
+                        ON e.department_id=d.department_id
+                        GROUP BY nvl(department_name,'소속부서(x)')
+                        ORDER BY cnt DESC")
+
+bp <- barplot(df$CNT,
+              names.arg=df$DEPT_NAME,
+              main='부서별 사원 수',
+              col=terrain.colors(length(df$DEPT_NAME)),
+              ylab='사원수(명)',
+              ylim=c(0,50),
+              las=2)
+text(x=bp, y=df$CNT, labels=df$CNT, pos=3)
+
+emp <- dbGetQuery(conn, "select * from employees")
+dept <- dbReadTable(conn, "DEPARTMENTS")
+위에서 emp와 dept 읽어들이는 방법은 둘이 같다고 보면 됨
+
+
+library(sqldf)
+res_sqldf <- sqldf('SELECT department_name dept_name, count(*) cnt
+                   FROM emp e LEFT OUTER JOIN dept d ON e.department_id=d.department_id
+                   GROUP BY department_name')
+
+res_sqldf$dept_name[is.na(res_sqldf$dept_name)] <- '소속부서(x)' 
+res_sqldf$dept_name
+
+bp <- barplot(res_sqldf$cnt,
+              names.arg=res_sqldf$dept_name,
+              main='부서별 사원 수',
+              col=terrain.colors(length(res_sqldf$dept_name)),
+              ylab='사원수(명)',
+              ylim=c(0,50),
+              las=2)
+text(x=bp, y=res_sqldf$cnt, labels=res_sqldf$cnt, pos=3)

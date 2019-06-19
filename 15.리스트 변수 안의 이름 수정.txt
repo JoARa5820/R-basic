@@ -1,0 +1,34 @@
+[15]
+lst변수에 blood 이름을 blood type 이름으로 수정하세요.
+
+
+[Answer]
+
+> names(lst)
+[1] "name"   "height" "weight" "blood" 
+
+> names(lst)[4]
+[1] "blood"
+
+> names(lst)[4] <- "blood type"
+
+> names(lst)
+[1] "name"       "height"     "weight"     "blood type"
+
+> lst
+$name
+[1] "scott"
+
+$height
+[1] 180
+
+$weight
+[1] 70
+
+$`blood type`
+[1] "A"
+
+
+# 꼭 벡터에서만 which를 쓰는 건 아니다.
+'scott' %in% lst
+which(lst == 'scott')

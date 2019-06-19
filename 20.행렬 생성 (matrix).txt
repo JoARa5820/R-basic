@@ -1,0 +1,19 @@
+[20]
+x 변수에 행렬을 구성하세요. 값은 1부터 10까지 입력하시고 5행 2열으로 만들면서 값은 열을 기준으로 생성하세요.
+
+
+[Answer]
+x <- matrix(1:10,nrow=5,ncol=2,byrow=FALSE)
+또는
+x <- matrix(c(1:10),nrow=5,ncol=2,byrow=FALSE)
+
+x
+
+> x <- matrix(1:10,nrow=5,ncol=2,byrow=FALSE)
+> x
+     [,1] [,2]
+[1,]    1    6
+[2,]    2    7
+[3,]    3    8
+[4,]    4    9
+[5,]    5   10

@@ -1,0 +1,22 @@
+[99]
+x변수에 1부터 100까지 입력한 후 1은 합을, 2는 평균, 3은 분산, 4는 표준편차를 구하는 switch문을 생성하세요.
+
+
+[Answer]
+> x <- 1:100
+
+> y <- 1
+> switch(y,sum(x),mean(x),var(x),sd(x))
+[1] 5050
+
+> y <- 2
+> switch(y,sum(x),mean(x),var(x),sd(x))
+[1] 50.5
+
+> y <- 3
+> switch(y,sum(x),mean(x),var(x),sd(x))
+[1] 841.6667
+
+> y <- 4
+> switch(y,sum(x),mean(x),var(x),sd(x))
+[1] 29.01149

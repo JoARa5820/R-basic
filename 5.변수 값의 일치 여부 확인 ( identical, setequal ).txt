@@ -1,0 +1,15 @@
+[5]
+x 변수의 값과 y 변수의 값이 일치가 되면 TRUE 아니면 FALSE를 출력해주세요.
+
+[Answer]
+x == y
+
+identical(x,y)
+
+> x == y
+[1]  TRUE FALSE FALSE FALSE FALSE
+> identical(x,y)
+[1] FALSE
+
+setequal(x,y)				# 얘도 생각해주자
+[1] FALSE

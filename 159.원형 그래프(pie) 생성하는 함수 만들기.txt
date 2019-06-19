@@ -1,0 +1,21 @@
+[159]
+년도를 입력하면 해당 년도의 원형 그래프 생성할 수 있는 함수를 생성하세요.
+
+# '\n' : (붙이긴 붙이되) 다음 행으로 넘기기
+
+
+[Answer]
+show_pie <- function(x){
+	graphics.off()
+
+x2 <- sta[sta$년도==x,(2:8)]
+
+sta_label1 <- round(x2/sum(x2)*100,1)
+
+sta_label2 <- paste(colnames(sta_label1),'\n',t(sta_label1),'%')
+
+pie(t(sta_label1),col=rainbow(7),labels=sta_label2)
+}
+
+
+show_pie(2013)

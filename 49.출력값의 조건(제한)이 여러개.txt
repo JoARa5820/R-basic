@@ -1,0 +1,14 @@
+[49]
+20번부서 사원이면서 급여는 10000를 초과한 사원 또는 급여가 2500 미만의 사원들의 employee_id, salary, department_id를 출력하세요.
+
+[Answer]
+emp[(emp$DEPARTMENT_ID==20 & emp$SALARY>10000) | emp$SALARY<2500,c('EMPLOYEE_ID','SALARY','DEPARTMENT_ID')]
+
+> emp[(emp$DEPARTMENT_ID==20 & emp$SALARY>10000) | emp$SALARY<2500,c('EMPLOYEE_ID','SALARY','DEPARTMENT_ID')]
+EMPLOYEE_ID SALARY DEPARTMENT_ID
+4          201  13000            20
+37         127   2400            50
+38         128   2200            50
+42         132   2100            50
+45         135   2400            50
+46         136   2200            50

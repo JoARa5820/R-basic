@@ -1,0 +1,12 @@
+[13]
+lst 변수에 name의 값을 'scott'로 수정하세요.
+
+[Answer]
+lst$name <- 'scott'
+
+> lst$name <- 'scott'
+> lst$name
+[1] "scott"
+
+또는
+> lst[1] <- 'scott'

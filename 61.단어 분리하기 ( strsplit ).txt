@@ -1,0 +1,18 @@
+[61]
+s 백터 변수를 생성해서 "BIG DATA MARKETING" 입력한 후 단어로 분리해주세요.
+
+
+[Answer]
+s <- "BIG DATA MARKETING"
+s
+strsplit(s,split=" ")
+
+
+> s <- "BIG DATA MARKETING"
+
+> s
+[1] "BIG DATA MARKETING"
+
+> strsplit(s,split=" ")
+[[1]]
+[1] "BIG"       "DATA"      "MARKETING"

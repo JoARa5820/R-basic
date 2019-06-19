@@ -1,0 +1,226 @@
+[165]
+itwill 자동차 수리점 부품 비용 자료 입니다. 분석하세요.
+
+# 범위: round(max(score)-min(score))
+
+< 데이터 >
+91 78 93 57 75 52 99 80 97 62
+71 69 72 89 66 75 79 75 72 76
+104 74 62 68 97 105 77 65 80 109
+85 97 88 68 83 68 71 69 67 74
+62 82 98 101 79 105 79 69 62 73
+
+
+[Answer]
+< score에 데이터 넣기 >
+> score <- scan()			# scan(): 벡터형
+1: 91 78 93 57 75 52 99 80 97 62
+11: 71 69 72 89 66 75 79 75 72 76
+21: 104 74 62 68 97 105 77 65 80 109
+31: 85 97 88 68 83 68 71 69 67 74
+41: 62 82 98 101 79 105 79 69 62 73
+51: 
+  Read 50 items
+
+
+< 1.줄기-잎 그림 >
+> stem(score)
+
+The decimal point is 1 digit(s) to the right of the |
+  
+  5 | 27
+6 | 2222567888999
+7 | 1122344555678999
+8 | 0023589
+9 | 1377789
+10 | 14559
+
+
+
+< 2.히스토그램 >
+> hist(score,breaks=seq(50,110,by=10),right=FALSE,col=rainbow(6),labels=TRUE)
+par(new=T)
+> plot(density(score),type='l',col='darkblue',lwd=2,axes=FALSE,xlab='',ylab='',main='')
+
+# labels=TRUE: 도수를 찍어줌
+# density(score): 밀도값 보여줌
+# axes=FALSE: 축을 그리지 않겠다
+# par: 두개의 그래프를 겹쳐서 그려준다.
+
+- hist: 히스토그램 / plot: 밀도그래프 / par: 중간에 써주면 hist와 plot을 겹쳐그려줌
+
+
+
+< 3.도수분포표 >
+c <- cut(score,breaks=seq(50,110,by=10),right=FALSE,labels=c('50이상~60미만','60이상~70미만','70이상~80미만','80이상~90미만','90이상~100미만','100이상'))
+c
+table(c)
+d <-table(c)
+d
+library(reshape2)
+
+> melt(d)
+c value
+1  50점이상~60점미만     2
+2  60점이상~70점미만    13
+3  70점이상~80점미만    16
+4  80점이상~90점미만     7
+5 90점이상~100점미만     7
+6          100점이상     5
+
+e <- melt(d)
+
+
+
+< 4.산점도 >
+plot(score,xlab='도수',ylab='범위',
+       main='itwill 자동차 수리점 부품 비용',
+       type='p',lty=1,lwd=1,pch=8,cex=1)
+
+
+
+< 5.원 그래프 >
+p <- round((e[,2]/sum(e[,2]))*100)
+p
+
+label <- paste(e[,2],'(',p,'%)',sep='')
+label
+  
+pie(e[,2],init.angle=90,labels=label,main='itwill 자동차 수리점 부품 비용',col = rainbow(length(e[,2])))
+
+legend('topright',legend=c('50이상~60미만','60이상~70미만','70이상~80미만','80이상~90미만','90이상~100미만','100이상'),title='비용',pch=15,cex=0.7,col=rainbow(length(e[,2])))
+
+
+
+< 6.막대그래프 >
+bp <- barplot(e[,2],width = 0.5,names.arg=c('50이상~60미만','60이상~70미만','70이상~80미만','80이상~90미만','90이상~100미만','100이상'), beside=TRUE,
+                ylim=c(0,20),xlab='비용',ylab='도수',
+                col = rainbow(length(e[,2])),
+                main = "itwill 자동차 수리점 부품 비용",
+                horiz = FALSE)
+
+text(x=bp,y=e[,2],labels=paste(e[,2],'',sep=''),pos=3)
+
+legend('topright',legend=c('50이상~60미만','60이상~70미만','70이상~80미만','80이상~90미만','90이상~100미만','100이상'),title='비용',pch=15,cex=0.5,col=rainbow(length(e[,2])))
+
+
+#-----------------------------------------------------------------------------#
+# 어떤 구간만 뽑아내서 도수분포표 그리고 싶을때
+
+> c <- cut(score,breaks=seq(50,80,by=10),right=FALSE,labels=c('50이상~60미만','60이상~70미만','70이상~80미만'))
+
+> c
+ [1] <NA>          70이상~80미만 <NA>          50이상~60미만 70이상~80미만 50이상~60미만 <NA>          <NA>          <NA>          60이상~70미만
+[11] 70이상~80미만 60이상~70미만 70이상~80미만 <NA>          60이상~70미만 70이상~80미만 70이상~80미만 70이상~80미만 70이상~80미만 70이상~80미만
+[21] <NA>          70이상~80미만 60이상~70미만 60이상~70미만 <NA>          <NA>          70이상~80미만 60이상~70미만 <NA>          <NA>         
+[31] <NA>          <NA>          <NA>          60이상~70미만 <NA>          60이상~70미만 70이상~80미만 60이상~70미만 60이상~70미만 70이상~80미만
+[41] 60이상~70미만 <NA>          <NA>          <NA>          70이상~80미만 <NA>          70이상~80미만 60이상~70미만 60이상~70미만 70이상~80미만
+Levels: 50이상~60미만 60이상~70미만 70이상~80미만
+
+> table(c)
+c
+50이상~60미만 60이상~70미만 70이상~80미만 
+            2            13            16 
+#-----------------------------------------------------------------------------#
+
+
+
+
+
+
+
+[166]
+학생들의 몸무게 자료를 이용해서 도수분포표,그래프를 생성하세요.
+
+[Answer]
+weight <- read.table('c:/data/weight.txt')
+
+weight
+m <- melt(weight)
+
+m
+
+class(m)
+
+w <- t(weight)
+w
+class(w)
+
+
+> class(weight)
+[1] "data.frame"
+> class(m)
+[1] "data.frame"
+> class(w)
+[1] "matrix"
+
+
+< 1.줄기-잎 그림 >
+stem(m[,2])
+
+
+
+< 2.히스토그램 >
+hist(m[,2],breaks=seq(50,100,by=10),right=FALSE,col=rainbow(5),label=TRUE)
+par(new=T)
+plot(density(m[,2]),type='l',col='darkblue',lwd=2,axes=FALSE,xlab='',ylab='',main='')
+
+
+
+< 3.도수분포표 >
+c <- cut(m[,2],breaks=seq(50,100,by=10),right=FALSE,labels=c('50이상~60미만','60이상~70미만','70이상~80미만','80이상~90미만','90이상~100미만'))
+c
+table(c)
+d <- table(c)
+d
+e <- melt(d)
+e
+
+
+
+< 4.산점도 >
+plot(m[,2],main='몸무게의 분포',type='p',lty=1,lwd=1,pch=8,cex=1)
+
+
+
+< 5.원 그래프 >
+p <- round((e[,2]/sum(e[,2]))*100)
+p
+
+label <- paste(e[,2],'(',p,'%)',sep='')
+label
+
+pie(e[,2],init.angle=90,labels=label,main='weight',col = rainbow(length(e[,2])))
+
+legend('topright',legend=c('50이상~60미만','60이상~70미만','70이상~80미만','80이상~90미만','90이상~100미만'),title='weight',pch=15,cex=0.7,col=rainbow(length(e[,2])))
+
+
+
+< 6.막대그래프 >
+bp <- barplot(e[,2],width = 0.5,names.arg=c('50이상~60미만','60이상~70미만','70이상~80미만','80이상~90미만','90이상~100미만'), beside=TRUE,
+                ylim=c(0,20),xlab='weight',ylab='도수',
+                col = rainbow(length(e[,2])),
+                main = "weight",
+                horiz = FALSE)
+
+text(x=bp,y=e[,2],labels=paste(e[,2],'',sep=''),pos=3)
+
+legend('topright',legend=c('50이상~60미만','60이상~70미만','70이상~80미만','80이상~90미만','90이상~100미만'),title='무게',pch=15,cex=0.5,col=rainbow(length(e[,2])))
+
+
+또는
+
+str(weight)
+weight <- as.matrix(weight)
+dim(weight) <- c(50,1)
+max(weight);min(weight)
+
+w_ct <- cut(weight,breaks=c(50,60,70,80,90,101),right=FALSE,labels=c('50이상~60미만','60이상~70미만','70이상~80미만','80이상~90미만','90이상~100미만'))
+
+table(w_ct)
+prop.table(w_t)
+c_df <- cbind(table(w_ct),prop.table(w_t))
+colnames(c_df) <- c('도수','상대도수')
+c_df
+
+hist(x=weight,breaks=~)

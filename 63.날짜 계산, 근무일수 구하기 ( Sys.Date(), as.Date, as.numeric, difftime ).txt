@@ -1,0 +1,15 @@
+[63]
+사원의 last_name, 근무일수를 출력하세요.
+
+
+[Answer]
+- 근무일수:
+  Sys.Date()-as.Date(as.character(emp$HIRE_DATE),format='%Y%m%d')
+
+
+paste(emp[,c('LAST_NAME')],Sys.Date()-as.Date(as.character(emp$HIRE_DATE),format='%Y%m%d'))
+paste(emp$LAST_NAME,Sys.Date()-as.Date(as.character(emp$HIRE_DATE),format='%Y%m%d'))
+
+
+data.frame(last_name = emp$LAST_NAME, working_days=as.numeric(Sys.Date()-as.Date(as.character(emp$HIRE_DATE),format='%Y%m%d')))
+data.frame(last_name = emp$LAST_NAME, working_days=as.numeric(difftime(Sys.Date(),as.Date(as.character(emp$HIRE_DATE),format='%Y%m%d'))))

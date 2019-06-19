@@ -1,0 +1,12 @@
+[80]
+문제79를 round 함수를 이용해서 아래와 같이 백단위에서 반올림되게 하세요. 
+
+4:  JONES 35700  ----->  36000
+
+
+[Answer]
+orderBy(~연봉,data.frame(emp$LAST_NAME,연봉=round(emp$SALARY*12),-3))
+
+# 오답
+df <- data.frame(이름=c(emp$LAST_NAME),연봉=c(emp$SALARY*12))
+df[order(round(df$연봉,-3)),c('이름','연봉')]

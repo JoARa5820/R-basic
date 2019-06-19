@@ -1,0 +1,109 @@
+[126]
+30번 부서 사원이면서 급여는 3000이상 받는 사원들의 last_name, hire_date, salary, job_id, department_id 출력해주세요. 단 subset 함수를 이용하세요.
+
+[Answer]
+emp[emp$SALARY >= 3000 & emp$DEPARTMENT_ID == 30, names(emp) %in% c('LAST_NAME','HIRE_DATE','SALARY','JOB_ID','DEPARTMENT_ID')]
+    
+subset(emp,SALARY >= 3000 & DEPARTMENT_ID == 30, select=c(LAST_NAME,HIRE_DATE,SALARY,JOB_ID,DEPARTMENT_ID))
+
+
+
+
+
+
+
+[127]
+입사한 날짜가 2002,2003년도에 입사한 사원들의 last_name, hire_date, salary, job_id, department_id 출력해주세요. 단 subset 함수를 이용하세요.
+
+[Answer]
+install.packages('lubridate')
+library(lubridate)
+
+emp$HIRE_DATE <- as.Date(as.character(emp$HIRE_DATE),format='%Y%m%d')
+
+subset(emp,format(HIRE_DATE,'%Y') %in% c('2002','2003'),select=c(LAST_NAME,HIRE_DATE,SALARY,JOB_ID,DEPARTMENT_ID))
+
+
+
+
+
+
+
+[130]
+150번 사원의 급여보다 더 많은 급여를 받는 사원들의 last_name, salary 를 출력하세요.
+
+[Answer]
+# subset은 데이터프레임 형식으로 뽑아냄(안에는 list형식임,벡터랑 비교할때는 벡터로 바꿔서 비교)
+subset(emp,SALARY > emp[emp$EMPLOYEE_ID==150,'SALARY'], select=c(LAST_NAME,SALARY))
+
+또는
+
+sal150 <- emp[emp$EMPLOYEE_ID==150,c('SALARY')]
+emp[emp$SALARY > sal150, c('LAST_NAME','SALARY')]
+
+emp[emp$SALARY > emp[emp$EMPLOYEE_ID==150, c("SALARY")] , c("LAST_NAME","SALARY") ]
+
+emp[emp$SALARY > unlist(subset(emp,EMPLOYEE_ID==150,select=(SALARY))) , c("LAST_NAME","SALARY") ]
+
+subset(emp, SALARY > unlist(subset(emp,EMPLOYEE_ID==150,select=(SALARY))), select=c(LAST_NAME,SALARY))
+
+
+
+
+
+
+
+[131]
+사원 테이블에서 가장 많은 급여를 받는 사원의 이름과 월급을 출력하세요.
+
+[Answer]
+subset(emp, SALARY==max(SALARY), select=c(LAST_NAME,SALARY))
+
+또는
+
+emp[emp$SALARY==max(emp$SALARY), c("LAST_NAME","SALARY")]
+
+subset(emp, SALARY==max(SALARY),select=c("LAST_NAME","SALARY"))
+
+
+
+
+
+
+
+[132]
+job_id가  SA_REP인 사원의 최대급여 이상 받는 사원들의 last_name,salary,job_id를 출력하세요.
+
+[Answer]
+subset(emp,SALARY >= max(emp[emp$JOB_ID=='SA_REP','SALARY']), select=c(LAST_NAME,SALARY,JOB_ID))
+
+또는
+
+emp[emp$SALARY >= max(emp[emp$JOB_ID=="SA_REP",c("SALARY")]), c("LAST_NAME","SALARY","JOB_ID")]
+
+subset(emp, SALARY >= max(emp[emp$JOB_ID=="SA_REP",c("SALARY")]), select=c(LAST_NAME,SALARY,JOB_ID)
+
+subset(emp, SALARY >= max(subset(emp,JOB_ID=="SA_REP",select=c(SALARY))), select=c(LAST_NAME,SALARY,JOB_ID))
+
+
+
+
+
+
+
+[133]
+KING 에게 보고하는 사원들의 last_name, salary를 출력하세요.
+
+[Answer]
+emp[emp$MANAGER_ID %in%  emp[toupper(emp$LAST_NAME)=='KING' , 'EMPLOYEE_ID'], c('LAST_NAME', 'SALARY')]
+
+subset(emp,MANAGER_ID %in% unlist(subset(emp,toupper(LAST_NAME)=='KING',select=(EMPLOYEE_ID))),select=c(LAST_NAME, SALARY))
+
+
+# 이렇게 하면 값 다름
+w <- emp[,c('EMPLOYEE_ID','LAST_NAME','MANAGER_ID')]
+m <- emp[,c('EMPLOYEE_ID','LAST_NAME')]
+
+y <- merge(w,m,by.x='MANAGER_ID',by.y='EMPLOYEE_ID')[,c('LAST_NAME.x','LAST_NAME.y')]
+
+subset(emp,y$LAST_NAME.y=='King',select=c(LAST_NAME,SALARY))

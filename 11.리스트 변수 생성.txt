@@ -1,0 +1,19 @@
+[11]
+lst 변수에 name = 'king' , height = 180, weight = 70 값을 넣어 주세요.
+
+
+[Answer]
+
+lst <- list(name = 'king', height = 180, weight = 70)		// list(키='밸류')
+
+> lst <- list(name = 'king', height = 180, weight = 70)
+
+> lst
+$`name`
+[1] "king"
+
+$height
+[1] "180"
+
+$weight
+[1] "70"

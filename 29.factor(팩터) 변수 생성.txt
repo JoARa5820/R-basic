@@ -1,0 +1,14 @@
+[29]
+벡터에 있는 값 "large", "medium", "small", "small", "large", "medium" 을 factor 변수로 구성하세요. 변수이름은 x로 생성하고 levels samal, medium, large 순으로 지정하세요.
+
+
+[Answer]
+
+x <- factor(c("large", "medium", "small", "small", "large", "medium"),level = c("small","medium","large"))
+x
+
+
+> x <- factor(c("large", "medium", "small", "small", "large", "medium"),level = c("small","medium","large"))
+> x
+[1] large  medium small  small  large  medium
+Levels: small medium large

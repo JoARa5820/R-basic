@@ -1,0 +1,40 @@
+[88]
+입사한 년도별 평균월급을 세로(aggregate), 가로(tapply)로 출력하세요.
+
+[Answer]
+emp$HIRE_DATE <- as.Date(as.character(emp$HIRE_DATE),format='%Y%m%d')
+aggregate(SALARY~format(HIRE_DATE,'%Y'),emp,mean)
+
+tapply(emp$SALARY,format(emp$HIRE_DATE,'%Y'), mean)
+
+
+> aggregate(SALARY~year(as.Date(as.character(emp$HIRE_DATE),format='%Y')),emp,mean)
+  year(as.Date(as.character(emp$HIRE_DATE), format = "%Y"))    SALARY
+1                                                      2001 17000.000
+2                                                      2002  9830.857
+3                                                      2003  8590.000
+4                                                      2004  8600.000
+5                                                      2005  6824.138
+6                                                      2006  5045.833
+7                                                      2007  4994.737
+8                                                      2008  5381.818
+
+
+> tapply(emp$SALARY,year(as.Date(as.character(emp$HIRE_DATE),format='%Y')),mean)
+     2001      2002      2003      2004      2005      2006      2007      2008 
+17000.000  9830.857  8590.000  8600.000  6824.138  5045.833  4994.737  5381.818 
+
+
+
+
+
+
+[89]
+부서별 인원수를 세로(aggregate), 가로(tapply)로 출력하세요.
+
+[Answer]
+aggregate(EMPLOYEE_ID~DEPARTMENT_ID,emp,length)
+tapply(emp$EMPLOYEE_ID,emp$DEPARTMENT_ID,length)
+
+aggregate(nchar(emp$EMPLOYEE_ID)/3~DEPARTMENT_ID,emp,sum)
+tapply(nchar(emp$EMPLOYEE_ID)/3,emp$DEPARTMENT_ID,sum)

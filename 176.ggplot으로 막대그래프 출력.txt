@@ -1,0 +1,175 @@
+[176]
+부서 인원수를 ggplot를 이용해서 막대그래프를 출력하세요.
+
+[Answer]
+a <- aggregate(EMPLOYEE_ID~DEPARTMENT_ID,emp,length)
+a
+
+colnames(a) <- c('dept_id','dosu')
+a
+
+ggplot(data=a,aes(dept_id,dosu,group=dept_id))+
+  geom_col(aes(fill=dosu),position='dodge')+
+  geom_text(aes(label=dosu),position=position_dodge(0.9),vjust=0)
+
+
+또는
+
+emp <- dbGetQuery(conn, "select nvl(department_id,0) dept_id, count(*) cn from employees group by nvl(department_id,0) order by cn desc")
+emp
+
+ggplot(emp, aes(x=factor(DEPT_ID),y=CN))+
+  geom_bar(stat="identity", fill= rainbow(12))+
+  geom_text(aes(label=CN),vjust=-0.1,size=5)+
+  labs(title='부서별 인원 현황', x='부서번호', y='인원수(명)')+
+  theme(plot.title=element_text(face='bold', color='darkblue', hjust=0.5))+
+  theme(axis.title.x=element_text(face='bold.italic', color='brown',size=6))+
+  theme(axis.title.y=element_text(face='bold.italic', color='brown'))
+
+
+# vjust를 음수로 하면 그래프 바깥쪽에 도수 써지고,양수로 하면 그래프 안에 도수 써짐
+# 부서가 듬성듬성 찍힌다? 문자형이 아니라 숫자형이라 그런가봄 => 팩터형으로 바꿔서 넣어주면 모두 찍어줌
+# hjust=0.5 : 정중앙에 제목을 찍어준다.
+
+
+
+
+
+
+
+[177]
+년도별 입사한 수를 ggplot를 이용해서 막대그래프를 출력하세요.
+
+[Answer]
+fm <- format(as.Date(emp$HIRE_DATE),'%Y')
+fm
+
+b <- aggregate(EMPLOYEE_ID~fm,emp,length)
+b
+
+colnames(b) <- c('hire_year','dosu')
+b
+
+- 이건 도수에 따른 파랑색의 깊이가 다름
+ggplot(data=b,aes(hire_year,dosu,group=hire_year))+
+  geom_col(aes(fill=dosu),position='dodge')+
+  geom_text(aes(label=dosu),position=position_dodge(0.9),vjust=0)
+
+
+- 이건 hire_year에 따라 색이 달라짐: 무지개 색
+ggplot(data=b,aes(hire_year,dosu,group=hire_year))+
+  geom_col(aes(fill=hire_year),position='dodge')+
+  geom_text(aes(label=dosu),position=position_dodge(0.9),vjust=0)+
+theme(axis.text.x=element_text(angle=45,hjust=1,vjust=1,colour='blue',size=10))
+
+
+- x축 글자 기울이고 색깔 넣기
+theme(axis.text.x=element_text(angle=45,hjust=1,vjust=1,colour='blue',size=10))
+
+
+또는
+
+library(JDBC)
+library(ggplot2)
+library(lubridate)
+library(plyr)	# count::plyr => help(count)보면 어디있는지 알려줌
+
+
+emp <- dbGetQuery(conn, "select * from employees")
+
+ggplot(emp,aes(x=year(HIRE_DATE)))+
+  geom_bar()
+
+ggplot(emp, aes(x=factor(year(HIRE_DATE)), fill=factor(year(HIRE_DATE))))+
+  geom_bar()+
+  labs(title = "년도별 입사현황", x="년도", y="인원수", fill="년도")+
+  theme(plot.title=element_text(face='bold', color='darkblue', hjust=0.5))+
+  theme(axis.title.x=element_text(face='bold', color='darkblue'))+
+  theme(axis.title.y=element_text(face='bold', color='darkblue'))+
+  theme(legend.title.align=0.5, legend.box.background = element_rect(),
+        legend.box.margin = margin(t=0.1,r=0.1, b=0.1, l=0.1,unit='cm'))
+
+
+year_cn <- count(emp,"year(HIRE_DATE)")
+colnames(year_cn) <- c("year","cn")
+year_cn
+
+
+ggplot(year_cn,aes(x=year,y=cn,fill=factor(year)))+
+  geom_bar(stat="identity")+
+  geom_text(aes(label=cn))+
+  ggtitle("년도별 입사현황",subtitle="신입사원")+
+
+	# 아래 두 theme는 ggtitle에 대한 꾸미는 기능
+
+  theme(plot.title = element_text(lineheight=.8, face="bold",color="darkblue",hjust=0.5))+
+  theme(plot.subtitle = element_text(lineheight=.8, 
+face="bold",color="darkblue",hjust=0.5))+
+
+  labs(caption = "2001년 ~ 2008년")+	# xlab 아래에 찍어주는 것
+
+  labs(x="년도",y="인원수")+
+
+  guides(fill=guide_legend(title="년도"))+	# 범례
+
+  theme(legend.title.align=0.5, legend.box.background = element_rect(),
+      legend.box.margin = margin(t=0.1,r=0.1, b=0.1, l=0.1,unit='cm'))
+  
+
+hire_cn <- dbGetQuery(conn, "select to_char(hire_date,'yyyy') year,count(*) cn from employees group by to_char(hire_date,'yyyy')")
+hire_cn
+ggplot(hire_cn,aes(x=YEAR,y=CN,fill=YEAR))+
+  geom_bar(stat="identity")+
+  geom_text(aes(label=CN))+
+  labs(title = "년도별 입사현황", x="년도", y="인원수", fill="년도")+
+  theme(plot.title=element_text(face='bold', color='darkblue', hjust=0.5))+
+  theme(axis.title.x=element_text(face='bold', color='darkblue'))+
+  theme(axis.title.y=element_text(face='bold', color='darkblue'))+
+  theme(legend.title.align=0.5, legend.box.background = element_rect(),
+        legend.box.margin = margin(t=0.1,r=0.1, b=0.1, l=0.1,unit='cm'))
+
+
+# theme는 꾸미는 기능!
+-theme(legend.title.align=0.5, legend.box.background = element_rect(),
+        legend.box.margin = margin(t=0.1,r=0.1, b=0.1, l=0.1,unit='cm')) : 범례
+ margin(t,r,b,l)에서 범례에서의 공백을 제어함 / unit은 어떤 단위로 조절할 것인지.
+
+-count라는 메소드는 library(plyr)에 있는 메소드임
+
+
+
+
+
+
+
+[178]
+학생들의 과목 점수를 각각으로 막대그래프를 그리세요.
+
+[Answer]
+df <- read.csv("c:/r/exam.csv", header=TRUE, stringsAsFactors=F)
+df
+
+ggplot(df, aes(x=name, y=grade))+
+  geom_bar(stat="identity",fill="red")+
+  theme(axis.text.x = element_blank())+
+  facet_wrap(~ name+subject)
+
+
+ggplot(df, aes(x=subject, y=grade, group=name))+
+  geom_col(aes(fill=subject))+
+  theme(axis.text.x = element_blank())+
+  facet_wrap(~ name)
+
+
+
+
+
+
+
+[179]
+'Mata','Young' 학생의 과목점수를 선과점 그래프로 생성하세요.
+
+[Answer]
+ggplot(df[df$name %in% c('Mata','Young'),],aes(x=subject,y=grade,color=name,group=name))+
+  geom_line()+
+  geom_point()

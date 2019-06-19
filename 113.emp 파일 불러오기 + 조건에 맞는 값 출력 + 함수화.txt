@@ -1,0 +1,31 @@
+[113]
+사원 번호를 입력 값으로 받아서 사원의 LAST_NAME, SALARY를 출력하는 함수를 생성하세요.
+
+> find(100)
+   LAST_NAME SALARY
+10      King  24000
+
+
+[Answer]
+
+read.csv
+getwd()
+setwd("c:/data")
+getwd()
+emp <- read.csv("emp.csv",header=TRUE,stringsAsFactors=FALSE)
+str(emp)
+
+# 또는 emp <- read.csv("c:/data/emp.csv",header=TRUE,stringsAsFactors=FALSE)
+
+
+emp_id <- function(x){
+  print(emp[emp$EMPLOYEE_ID==x,c('LAST_NAME','SALARY')])
+}
+
+
+emp_id <- function(x){
+  emp[emp$EMPLOYEE_ID==x,c('LAST_NAME','SALARY')]		# print 안써도 됨
+}
+
+
+emp_id(100)

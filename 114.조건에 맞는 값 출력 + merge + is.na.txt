@@ -1,0 +1,57 @@
+[114]
+20번 부서에 소속되어 있는 사원의 LAST_NAME, SALARY, JOB_ID, DEPARTMENT_NAME을 출력하세요.
+
+[Answer]
+select e.last_name,e.salary,e.job_id,d.department_name
+from emp e, dept d
+where e.department_id = 20
+and d.department_id = 20;
+
+> emp_20 <- emp[emp$DEPARTMENT_ID == 20,]
+> merge(emp_20, dept, by="DEPARTMENT_ID")[ , c("LAST_NAME","SALARY","DEPARTMENT_NAME")]
+
+merge(emp[emp$DEPARTMENT_ID==20, c('LAST_NAME','SALARY','DEPARTMENT_ID')], dept[dept$DEPARTMENT_ID==20,])[,c('LAST_NAME','SALARY','DEPARTMENT_NAME')]
+
+merge(emp[emp$DEPARTMENT_ID == 20,][,c('LAST_NAME','SALARY','DEPARTMENT_ID')], dept, by="DEPARTMENT_ID")[ , c("LAST_NAME","SALARY","DEPARTMENT_NAME")]
+
+
+
+
+
+
+[115]
+salary가 3000 이상이고 job_id는 ST_CLERK인 사원들의 employee_id, salary, job_id, department_id, department_name을 출력하세요.
+
+[Answer]
+x <- emp[emp$SALARY>=3000 & emp$JOB_ID=='ST_CLERK',c('EMPLOYEE_ID','SALARY','JOB_ID','DEPARTMENT_ID')]
+
+merge(x, dept[,c('DEPARTMENT_ID','DEPARTMENT_NAME')])
+
+merge(emp[emp$SALARY>=3000 & emp$JOB_ID=='ST_CLERK',c('EMPLOYEE_ID','SALARY','JOB_ID','DEPARTMENT_ID')], dept[,c('DEPARTMENT_ID','DEPARTMENT_NAME')])
+
+
+
+
+
+
+[116]
+커미션이 NA 인 사원들의 last_name, commission_pct, department_id, department_name을 출력하세요.
+
+[Answer]
+x <- emp[is.na(emp$COMMISSION_PCT),c("LAST_NAME","COMMISSION_PCT","DEPARTMENT_ID") ]
+
+merge(x,dept,by='DEPARTMENT_ID')[,c('LAST_NAME','COMMISSION_PCT','DEPARTMENT_ID','DEPARTMENT_NAME')]
+
+
+
+
+
+
+[117]
+커미션이 NA가 아닌 사원들의 last_name, commission_pct,department_id, department_name을 출력하세요.
+
+[Answer]
+x <- emp[!is.na(emp$COMMISSION_PCT),c("LAST_NAME","COMMISSION_PCT","DEPARTMENT_ID") ]
+y <- dept[,c("DEPARTMENT_ID","DEPARTMENT_NAME")]
+
+merge(x,y,by='DEPARTMENT_ID')[,c('LAST_NAME','COMMISSION_PCT','DEPARTMENT_ID','DEPARTMENT_NAME')]

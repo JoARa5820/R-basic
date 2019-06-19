@@ -1,0 +1,102 @@
+#-----------------------------------------------------------------------------#
+■ grep함수 : 문자 패턴을 찾을 때 사용되는 함수
+
+       ^ : 첫번째 
+       $ : 마지막
+       . : 한자리수
+       * : wild card(%)			# * 쓸 땐 보편적으로 .*으로 쓴다.
+
+<예>
+emp[grep("aa", emp$LAST_NAME),c("LAST_NAME","SALARY")]
+
+emp[grep("[x-z]", emp$LAST_NAME, ignore.case = TRUE),c("LAST_NAME","SALARY")]
+
+ignore.case = TRUE 대소문자 구분안한다.
+ignore.case = FALSE 대소문자 구분한다.
+#-----------------------------------------------------------------------------#
+
+
+[50]
+last_name의 첫번째 글자가 A 로 시작하는 사원들의 last_name, salary를 출력하세요.
+
+[Answer]
+-답 :-----------------------------------------------------
+>emp[grep("^A.*",emp$LAST_NAME), c("LAST_NAME","SALARY")]
+>emp[grep("^A",emp$LAST_NAME),c('LAST_NAME','SALARY')]
+----------------------------------------------------------
+오답: * 쓸 때 주의
+emp[grep("^A*",emp$LAST_NAME),c('LAST_NAME','SALARY')]
+--------------------------------------------------------------
+
+> emp[grep("^A",emp$LAST_NAME),c('LAST_NAME','SALARY')]
+   LAST_NAME SALARY
+15    Austin   4800
+40  Atkinson   2800
+76      Ande   6400
+84      Abel  11000
+
+
+-- emp[grep("^A*",emp$LAST_NAME),c('LAST_NAME','SALARY')] : 이렇게 하면 값 이상함
+> emp[grep("^A*",emp$LAST_NAME),c('LAST_NAME','SALARY')]
+      LAST_NAME SALARY
+1      OConnell   2600
+2         Grant   2600
+3        Whalen   4400
+4     Hartstein  13000
+5           Fay   6000
+
+
+
+
+
+
+[51]
+last_name의 끝글자가 g 로 끝나는 사원들의 last_name, salary를 출력하세요.
+
+[Answer]
+> emp [grep ("*.g$", emp$LAST_NAME) ,c("LAST_NAME","SALARY")]
+> emp [grep ("*g$", emp$LAST_NAME) ,c("LAST_NAME","SALARY")]
+> emp [grep("g$",emp$LAST_NAME),c('LAST_NAME','SALARY')]
+
+
+
+
+
+
+[52]
+last_name의 z 를 포함하고 있는 사원들의 last_name, salary를 출력하세요.
+
+[Answer]
+> emp [grep ('^.*z.*$', emp$LAST_NAME) ,c("LAST_NAME","SALARY")]
+> emp [grep ('z', emp$LAST_NAME) ,c("LAST_NAME","SALARY")]
+
+
+
+
+
+
+[53]
+last_name의 두번째 철자가 u 인 사원들의 last_name, salary를 출력하세요. ???
+
+[Answer]
+-답 :-----------------------------------------------------
+> emp [grep ('^.u.*$', emp$LAST_NAME) ,c("LAST_NAME","SALARY")]
+> emp [grep ('^.u', emp$LAST_NAME) ,c("LAST_NAME","SALARY")]
+----------------------------------------------------------
+-오답:
+emp[grep(".u*",emp$LAST_NAME),c('LAST_NAME','SALARY')] : 이렇게 하면 값 이상함
+emp[grep("u.*",emp$LAST_NAME),c('LAST_NAME','SALARY')] : 이렇게 하면 값 이상함
+--------------------------------------------------------------
+
+
+
+
+
+
+[57]
+last_name의 두번째 철자가 m  인 사원들의 last_name, salary를 출력하세요.
+
+[Answer]
+> emp[grep("^.m.*$",emp$LAST_NAME),c('LAST_NAME','SALARY')]
+
+> emp[substr(emp$LAST_NAME,2,2)=='m',c('LAST_NAME','SALARY')]

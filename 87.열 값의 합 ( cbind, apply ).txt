@@ -1,0 +1,20 @@
+[87]
+아래화면의 결과 처럼 데이터 프레임을 생성한 후 
+total 컬럼을 생성해서 sql과 python 의 합을 구하세요.(단 apply함수를 이용하세요)
+
+name 	sql 	python
+king	96	75
+smith	NA	91
+jane	78	86
+scott	90	NA
+
+
+[Answer]
+> df <- data.frame(name=c('king','smith','jane','scott'),sql=c(96,NA,78,90),python=c(75,91,86,NA),stringsAsFactors=F)
+> df <- cbind(df,total=apply(df[,c(2,3)],1,sum,na.rm=TRUE))
+> df
+   name sql python total
+1  king  96     75   171
+2 smith  NA     91    91
+3  jane  78     86   164
+4 scott  90     NA    90

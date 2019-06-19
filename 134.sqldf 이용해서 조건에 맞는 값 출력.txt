@@ -1,0 +1,41 @@
+[134]
+자신의 관리자 보다 더 많은 급여를 받는 사원이름, 사원급여, 관리자이름, 관리자급여를 출력하세요.
+
+[Answer]
+sqldf('select w.last_name,w.salary,m.last_name,m.salary
+	from emp w, emp m
+	where w.manager_id = m.employee_id
+	and w.salary > m.salary')
+
+
+-일반사원
+select last_name,salary,manager_id
+from emp;
+
+-관리자
+select employee_id,last_name,salary
+from emp;
+
+
+
+
+
+
+[135]
+자신의 부서 평균 급여보다 많이 받는 사원들의 정보를 출력하세요.
+
+[Answer]
+- 조인의 일량을 줄이기 위해 인나인뷰 사용
+
+sqldf('select e2.employee_id,e2.salary,e2.department_id,e1.avgsal
+from(select department_id,avg(salary) avgsal
+from emp
+group by department_id) e1, emp e2
+where e1.department_id = e2.department_id
+and e2.salary > e1.avgsal')
+
+
+- 상호연관 서브쿼리(exists와 not exists 이용하면 매우 유용)
+select *
+from emp e
+where salary > (select avg(salary) from emp where department_id = e.department_id)
